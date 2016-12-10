@@ -1,5 +1,6 @@
 package com.example.arunan.dreamcompilers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,13 +35,23 @@ public class DiseaseListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     //updateUI method for configuring user interfaces
     private void updateUI(){
         DiseaseLab diseaseLab = DiseaseLab.get(getActivity());
         List<Disease> diseases = diseaseLab.getDiseases();
 
-        mAdapter = new DiseaseAdapter(diseases);
-        mDiseaseRecylcerView.setAdapter(mAdapter);
+        if (mAdapter == null){
+            mAdapter = new DiseaseAdapter(diseases);
+            mDiseaseRecylcerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -67,9 +78,11 @@ public class DiseaseListFragment extends Fragment {
             mDateTextView.setText(mDisease.getDate().toString());
         }
 
+        //start Disease activity when clicked
         @Override
         public void onClick(View v) {
-
+            Intent intent = DiseaseActivity.newIntent(getActivity(), mDisease.getEntryId());
+            startActivity(intent);
         }
     }
 

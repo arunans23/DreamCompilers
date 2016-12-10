@@ -12,6 +12,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by arunan on 12/9/16.
@@ -27,12 +28,25 @@ public class DiseaseFragment extends Fragment {
     private EditText mNoVictims;
     private NumberPicker mVictimCount;
 
+    private static final String ARG_DISEASE_ID = "disease_id";
+
+    public static DiseaseFragment newInstance(UUID diseaseID){
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_DISEASE_ID, diseaseID);
+
+        DiseaseFragment fragment = new DiseaseFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //new disease gets created when Fragment is created
-        mDisease = new Disease();
+        UUID diseaseId = (UUID) getArguments().getSerializable(ARG_DISEASE_ID);
+
+        mDisease = DiseaseLab.get(getActivity()).getDisease(diseaseId);
     }
 
 
@@ -51,6 +65,7 @@ public class DiseaseFragment extends Fragment {
 
         //Symptoms Field
         mSymptomsField = (EditText)v.findViewById(R.id.disease_symptoms);
+        mSymptomsField.setText(mDisease.getSymptoms());
         mSymptomsField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -73,6 +88,7 @@ public class DiseaseFragment extends Fragment {
 
         //Description field
         mDescriptionField = (EditText)v.findViewById(R.id.disease_description);
+        mDescriptionField.setText(mDisease.getDescription());
         mDescriptionField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
