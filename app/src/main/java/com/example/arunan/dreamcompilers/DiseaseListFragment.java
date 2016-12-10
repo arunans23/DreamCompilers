@@ -81,7 +81,7 @@ public class DiseaseListFragment extends Fragment {
         //start Disease activity when clicked
         @Override
         public void onClick(View v) {
-            Intent intent = DiseaseActivity.newIntent(getActivity(), mDisease.getEntryId());
+            Intent intent = DiseasePagerActivity.newIntent(getActivity(), mDisease.getEntryId());
             startActivity(intent);
         }
     }
