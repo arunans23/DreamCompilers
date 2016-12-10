@@ -10,13 +10,43 @@
               android:text="@string/disease_title_textview"
               android:textSize="24dp"
               android:paddingLeft="16dp"
+        />
 
+    <TextView android:id="@+id/disease_symptoms_title"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/disease_symptoms_title"
         />
 
     <EditText android:id="@+id/disease_symptoms"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="150dp"
               android:hint="@string/disease_symptom_hint"
         />
+
+    <TextView android:id="@+id/disease_description_title"
+              android:layout_height="wrap_content"
+              android:layout_width="match_parent"
+              android:text="@string/disease_description_title"
+        />
+
+    <EditText android:id="@+id/disease_description"
+              android:layout_width="match_parent"
+              android:layout_height="150dp"
+              android:hint= "@string/disease_description_hint"
+        />
+
+    <TextView android:id="@+id/disease_victim_count_title"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/disease_victim_count_title"
+        />
+
+    <NumberPicker android:id="@+id/disease_victim_count"
+              android:layout_height="wrap_content"
+              android:layout_width="wrap_content"
+        />
+
+
 
 </LinearLayout>

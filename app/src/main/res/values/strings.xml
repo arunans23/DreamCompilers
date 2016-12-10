@@ -3,4 +3,9 @@
 
     <string name="disease_symptom_hint">Enter the symptoms here</string>
     <string name="disease_title_textview">disease</string>
+    <string name="disease_description_hint">Enter the description here</string>
+    <string name="disease_symptoms_title">Symptoms</string>
+    <string name="disease_description_title">Description</string>
+    <string name="disease_victim_count_title">#Victims</string>
+
 </resources>

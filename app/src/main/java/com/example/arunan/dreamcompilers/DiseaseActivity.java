@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 
 public class DiseaseActivity extends FragmentActivity {
 
+    //container from Disease Fragment
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
