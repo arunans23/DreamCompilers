@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+              android:layout_gravity="center"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content">
 
     <TextView android:id="@+id/disease_title"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:text="@string/disease_title_textview"
               android:textSize="24dp"
-              android:paddingLeft="16dp"
+              android:layout_marginLeft="8dp"
+              android:layout_marginRight="8dp"
+              style="?android:listSeparatorTextViewStyle"
+
         />
 
     <TextView android:id="@+id/disease_symptoms_title"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:text="@string/disease_symptoms_title"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
+              style="?android:listSeparatorTextViewStyle"
         />
 
     <EditText android:id="@+id/disease_symptoms"
               android:layout_width="match_parent"
-              android:layout_height="150dp"
+              android:layout_height="wrap_content"
+              android:padding="50dp"
               android:hint="@string/disease_symptom_hint"
         />
 
@@ -28,11 +36,16 @@
               android:layout_height="wrap_content"
               android:layout_width="match_parent"
               android:text="@string/disease_description_title"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
+              android:layout_marginTop="16dp"
+              style="?android:listSeparatorTextViewStyle"
         />
 
     <EditText android:id="@+id/disease_description"
               android:layout_width="match_parent"
-              android:layout_height="150dp"
+              android:layout_height="wrap_content"
+              android:padding="50dp"
               android:hint= "@string/disease_description_hint"
         />
 
@@ -40,13 +53,22 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:text="@string/disease_victim_count_title"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
+              android:layout_marginTop="16dp"
+              android:layout_gravity="center"
+              style="?android:listSeparatorTextViewStyle"
         />
 
     <NumberPicker android:id="@+id/disease_victim_count"
               android:layout_height="wrap_content"
               android:layout_width="wrap_content"
+                  android:layout_gravity="center"
+                  android:layout_centerInParent="true"
+
         />
 
 
 
 </LinearLayout>
+

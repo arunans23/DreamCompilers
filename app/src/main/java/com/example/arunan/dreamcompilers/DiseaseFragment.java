@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -24,6 +25,7 @@ public class DiseaseFragment extends Fragment {
     private EditText mSymptomsField;
     private EditText mDescriptionField;
     private EditText mNoVictims;
+    private NumberPicker mVictimCount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,18 @@ public class DiseaseFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        //VictimCount field
+        mVictimCount = (NumberPicker)v.findViewById(R.id.disease_victim_count);
+        mVictimCount.setMinValue(0);
+        mVictimCount.setMaxValue(10000);
+        mVictimCount.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                mDisease.setNoVictims(newVal);
+                mDisease.setLastEditDate(new Date());
             }
         });
 
