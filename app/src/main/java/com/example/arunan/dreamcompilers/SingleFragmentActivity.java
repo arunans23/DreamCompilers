@@ -2,8 +2,8 @@ package com.example.arunan.dreamcompilers;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by arunan on 12/10/16.
@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentManager;
 
 //generic class to create activities containing a single Fragment
 
-public abstract class SingleFragmentActivity  extends FragmentActivity {
+public abstract class SingleFragmentActivity  extends AppCompatActivity {
     protected abstract Fragment createFragment();
 
     @Override

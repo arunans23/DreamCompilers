@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 //class to implement ViewPager in Disease fragments
 
-public class DiseasePagerActivity extends FragmentActivity {
+public class DiseasePagerActivity extends AppCompatActivity {
 
     private static final String EXTRA_DISEASE_ID = "com.example.arunan.dreamcompilers.disease_id";
 

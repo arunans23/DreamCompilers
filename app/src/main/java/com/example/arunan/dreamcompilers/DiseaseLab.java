@@ -27,6 +27,12 @@ public class DiseaseLab {
 
     private DiseaseLab(Context context){
         mDiseases = new ArrayList<>();
+//        Disease sample = new Disease();
+//        sample.setDescription("this disease description is sample");
+//        sample.setSymptoms("this disease symptoms is sample");
+//        sample.setNoVictims(2);
+//
+//        mDiseases.add(sample);
     }
 
     public List<Disease> getDiseases(){
@@ -40,5 +46,9 @@ public class DiseaseLab {
             }
         }
         return null;
+    }
+
+    public void addDisease(Disease disease){
+        mDiseases.add(disease);
     }
 }

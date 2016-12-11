@@ -111,6 +111,7 @@ public class DiseaseFragment extends Fragment {
         mVictimCount = (NumberPicker)v.findViewById(R.id.disease_victim_count);
         mVictimCount.setMinValue(0);
         mVictimCount.setMaxValue(10000);
+        mVictimCount.setValue(mDisease.getNoVictims());
         mVictimCount.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
