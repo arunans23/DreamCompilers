@@ -71,6 +71,7 @@ public class DiseaseListFragment extends Fragment {
         inflater.inflate(R.menu.fragment_disease_list, menu);
     }
 
+    //actions regarding selecting menu options
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
