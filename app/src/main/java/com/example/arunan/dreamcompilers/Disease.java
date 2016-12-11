@@ -17,11 +17,19 @@ public class Disease {
     private Date mLastEditDate;
     private UUID mUserId;
 
-
+    //constructor to call when entering new crime
     public Disease(){
-        mEntryId = UUID.randomUUID();
-        mTitle = "disease" + mEntryId.toString();
+        this(UUID.randomUUID());
         mDate = new Date();
+        mTitle = "disease" + mEntryId.toString();
+
+    }
+
+    //constructor to call when querying the database
+    public Disease(UUID id){
+        mEntryId = id;
+
+        mLastEditDate = new Date();
     }
 
     public UUID getEntryId() {
@@ -32,12 +40,20 @@ public class Disease {
         return mTitle;
     }
 
+    public void setTitle(String title){
+        this.mTitle = title;
+    }
+
     public String getSymptoms() {
         return mSymptoms;
     }
 
     public Date getDate() {
         return mDate;
+    }
+
+    public void setDate(Date date){
+        mDate = date;
     }
 
     public void setSymptoms(String symptoms) {

@@ -49,6 +49,12 @@ public class DiseaseFragment extends Fragment {
         mDisease = DiseaseLab.get(getActivity()).getDisease(diseaseId);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        DiseaseLab.get(getActivity()).updateDisease(mDisease);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

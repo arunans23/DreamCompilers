@@ -60,6 +60,7 @@ public class DiseaseListFragment extends Fragment {
             mAdapter = new DiseaseAdapter(diseases);
             mDiseaseRecylcerView.setAdapter(mAdapter);
         } else {
+            mAdapter.setDiseases(diseases);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -144,6 +145,10 @@ public class DiseaseListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mDiseases.size();
+        }
+
+        public void setDiseases(List<Disease> diseases){
+            mDiseases = diseases;
         }
     }
 }
