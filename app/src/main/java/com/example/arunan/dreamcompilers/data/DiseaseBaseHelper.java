@@ -1,10 +1,8 @@
-package com.example.arunan.dreamcompilers;
+package com.example.arunan.dreamcompilers.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.example.arunan.dreamcompilers.DiseaseDbSchema.DiseaseTable;
 
 /**
  * Created by arunan on 12/11/16.
@@ -22,14 +20,14 @@ public class DiseaseBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + DiseaseTable.NAME + "(" +
-                DiseaseTable.Cols.UUID + " primary key, " +
-                DiseaseTable.Cols.TITLE + ", " +
-                DiseaseTable.Cols.SYMPTOMS + ", " +
-                DiseaseTable.Cols.DESCRIPTION + ", " +
-                DiseaseTable.Cols.VICTIMCOUNT + ", " +
-                DiseaseTable.Cols.DATE + ", " +
-                DiseaseTable.Cols.LAST_EDIT_DATE + ")"
+        db.execSQL("create table " + DiseaseDbSchema.DiseaseTable.NAME + "(" +
+                DiseaseDbSchema.DiseaseTable.Cols.UUID + " primary key, " +
+                DiseaseDbSchema.DiseaseTable.Cols.TITLE + ", " +
+                DiseaseDbSchema.DiseaseTable.Cols.SYMPTOMS + ", " +
+                DiseaseDbSchema.DiseaseTable.Cols.DESCRIPTION + ", " +
+                DiseaseDbSchema.DiseaseTable.Cols.VICTIMCOUNT + ", " +
+                DiseaseDbSchema.DiseaseTable.Cols.DATE + ", " +
+                DiseaseDbSchema.DiseaseTable.Cols.LAST_EDIT_DATE + ")"
         );
     }
 

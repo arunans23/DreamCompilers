@@ -1,11 +1,13 @@
-package com.example.arunan.dreamcompilers;
+package com.example.arunan.dreamcompilers.models;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.arunan.dreamcompilers.DiseaseDbSchema.DiseaseTable;
+import com.example.arunan.dreamcompilers.data.DiseaseBaseHelper;
+import com.example.arunan.dreamcompilers.data.DiseaseCursorWrapper;
+import com.example.arunan.dreamcompilers.data.DiseaseDbSchema.DiseaseTable;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.arunan.dreamcompilers;
+package com.example.arunan.dreamcompilers.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.arunan.dreamcompilers.models.Disease;
+import com.example.arunan.dreamcompilers.models.DiseaseLab;
+import com.example.arunan.dreamcompilers.activities.DiseasePagerActivity;
+import com.example.arunan.dreamcompilers.R;
 
 import java.util.List;
 

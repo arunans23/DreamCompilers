@@ -1,4 +1,4 @@
-package com.example.arunan.dreamcompilers;
+package com.example.arunan.dreamcompilers.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import com.example.arunan.dreamcompilers.models.Disease;
+import com.example.arunan.dreamcompilers.models.DiseaseLab;
+import com.example.arunan.dreamcompilers.R;
 
 import java.util.Date;
 import java.util.UUID;

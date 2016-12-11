@@ -1,6 +1,7 @@
-package com.example.arunan.dreamcompilers;
+package com.example.arunan.dreamcompilers.models;
 
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -21,15 +22,14 @@ public class Disease {
     public Disease(){
         this(UUID.randomUUID());
         mDate = new Date();
-        mTitle = "disease" + mEntryId.toString();
+        mTitle = "disease" + new Random().nextInt(10000);
+        mLastEditDate = new Date();
 
     }
 
     //constructor to call when querying the database
     public Disease(UUID id){
         mEntryId = id;
-
-        mLastEditDate = new Date();
     }
 
     public UUID getEntryId() {

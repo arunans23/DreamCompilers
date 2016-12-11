@@ -1,9 +1,11 @@
-package com.example.arunan.dreamcompilers;
+package com.example.arunan.dreamcompilers.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.arunan.dreamcompilers.R;
 
 /**
  * Created by arunan on 12/10/16.

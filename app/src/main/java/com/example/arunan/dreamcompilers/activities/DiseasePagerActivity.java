@@ -1,4 +1,4 @@
-package com.example.arunan.dreamcompilers;
+package com.example.arunan.dreamcompilers.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.arunan.dreamcompilers.models.Disease;
+import com.example.arunan.dreamcompilers.models.DiseaseLab;
+import com.example.arunan.dreamcompilers.R;
+import com.example.arunan.dreamcompilers.fragments.DiseaseFragment;
 
 import java.util.List;
 import java.util.UUID;

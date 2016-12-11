@@ -1,6 +1,8 @@
-package com.example.arunan.dreamcompilers;
+package com.example.arunan.dreamcompilers.activities;
 
 import android.support.v4.app.Fragment;
+
+import com.example.arunan.dreamcompilers.fragments.DiseaseListFragment;
 
 /**
  * Created by arunan on 12/10/16.

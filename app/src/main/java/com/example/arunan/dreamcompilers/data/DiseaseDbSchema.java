@@ -1,4 +1,4 @@
-package com.example.arunan.dreamcompilers;
+package com.example.arunan.dreamcompilers.data;
 
 /**
  * Created by arunan on 12/11/16.
