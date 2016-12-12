@@ -5,12 +5,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+    <CheckBox android:id="@+id/list_item_checkbox"
+              android:enabled="false"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentRight="true"
+              android:padding="4dp"/>
+
     <TextView android:id="@+id/list_item_disease_title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:padding="4dp"
         tools:text="Disease Title"
+              android:layout_toLeftOf="@id/list_item_checkbox"
         />
 
     <TextView android:id="@+id/list_item_disease_date_text_view"
@@ -20,6 +28,8 @@
               android:padding="4dp"
               tools:text="Disease Date"
         />
+
+
 
 
 

@@ -17,6 +17,7 @@ public class Disease {
     private Date mDate;
     private Date mLastEditDate;
     private UUID mUserId;
+    private boolean isSynced;
 
     //constructor to call when entering new crime
     public Disease(){
@@ -24,6 +25,7 @@ public class Disease {
         mDate = new Date();
         mTitle = "disease" + new Random().nextInt(10000);
         mLastEditDate = new Date();
+        isSynced= false;
 
     }
 
@@ -90,5 +92,13 @@ public class Disease {
 
     public void setUserId(UUID userId) {
         mUserId = userId;
+    }
+
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
     }
 }

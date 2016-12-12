@@ -26,6 +26,7 @@ public class DiseaseCursorWrapper extends CursorWrapper{
         int victimCount = getInt(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.VICTIMCOUNT));
         long date = getLong(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.DATE));
         long last_edit_date = getLong(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.LAST_EDIT_DATE));
+        int isSynced = getInt(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.SYNCED));
 
         Disease disease = new Disease(UUID.fromString(uuidString));
         disease.setTitle(title);
@@ -34,6 +35,7 @@ public class DiseaseCursorWrapper extends CursorWrapper{
         disease.setNoVictims(victimCount);
         disease.setDate(new Date(date));
         disease.setLastEditDate(new Date(last_edit_date));
+        disease.setSynced(isSynced != 0);
 
         return disease;
     }

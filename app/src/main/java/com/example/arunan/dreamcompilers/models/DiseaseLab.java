@@ -102,7 +102,7 @@ public class DiseaseLab {
         values.put(DiseaseTable.Cols.VICTIMCOUNT, disease.getNoVictims());
         values.put(DiseaseTable.Cols.DATE, disease.getDate().getTime());
         values.put(DiseaseTable.Cols.LAST_EDIT_DATE, disease.getLastEditDate().getTime());
-
+        values.put(DiseaseTable.Cols.SYNCED, disease.isSynced() ? 1 : 0 );
 
         return values;
     }

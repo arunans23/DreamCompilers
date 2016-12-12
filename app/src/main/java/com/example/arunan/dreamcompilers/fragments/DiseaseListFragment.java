@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.arunan.dreamcompilers.models.Disease;
@@ -97,6 +98,7 @@ public class DiseaseListFragment extends Fragment {
     private class DiseaseHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView mTitleTextView;
         private TextView mDateTextView;
+        private CheckBox mCheckBox;
 
         private Disease mDisease;
 
@@ -108,12 +110,15 @@ public class DiseaseListFragment extends Fragment {
                     itemView.findViewById(R.id.list_item_disease_title_text_view);
             mDateTextView = (TextView)
                     itemView.findViewById(R.id.list_item_disease_date_text_view);
+            mCheckBox = (CheckBox)
+                    itemView.findViewById(R.id.list_item_checkbox);
         }
 
         public void bindDisease(Disease disease){
             mDisease = disease;
             mTitleTextView.setText(mDisease.getTitle());
             mDateTextView.setText(mDisease.getDate().toString());
+            mCheckBox.setChecked(mDisease.isSynced());
         }
 
         //start Disease activity when clicked
