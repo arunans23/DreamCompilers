@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_gravity="center"
+              android:background="@color/disease_fragment_bg"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
@@ -28,7 +29,17 @@
     <EditText android:id="@+id/disease_symptoms"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:padding="50dp"
+              android:inputType="textMultiLine"
+              android:enabled="true"
+              android:minLines="3"
+              android:maxLines="3"
+              android:isScrollContainer="true"
+              android:focusable="true"
+              android:background="@color/edit_text_bg"
+              android:gravity="top"
+              android:padding="24dp"
+              android:layout_marginLeft="8dp"
+              android:layout_marginRight="8dp"
               android:hint="@string/disease_symptom_hint"
         />
 
@@ -45,7 +56,17 @@
     <EditText android:id="@+id/disease_description"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:padding="50dp"
+              android:inputType="textMultiLine"
+              android:enabled="true"
+              android:minLines="3"
+              android:maxLines="3"
+              android:isScrollContainer="true"
+              android:focusable="true"
+              android:background="@color/edit_text_bg"
+              android:gravity="top"
+              android:padding="24dp"
+              android:layout_marginLeft="8dp"
+              android:layout_marginRight="8dp"
               android:hint= "@string/disease_description_hint"
         />
 
