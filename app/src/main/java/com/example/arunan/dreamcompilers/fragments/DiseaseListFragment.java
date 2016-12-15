@@ -86,7 +86,7 @@ public class DiseaseListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_disease:
-                Disease disease = new Disease();
+                Disease disease = new Disease(userEmail);
                 DiseaseLab.get(getActivity()).addDisease(disease);
                 Intent intent = DiseasePagerActivity
                         .newIntent(getActivity(), disease.getEntryId());

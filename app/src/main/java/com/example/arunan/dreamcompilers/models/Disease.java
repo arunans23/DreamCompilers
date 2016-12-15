@@ -20,11 +20,12 @@ public class Disease {
     private boolean isSynced;
 
     //constructor to call when entering new crime
-    public Disease(){
+    public Disease(String userEmail){
         this(UUID.randomUUID());
         mDate = new Date();
         mTitle = "disease" + new Random().nextInt(10000);
         mLastEditDate = new Date();
+        mUserEmail = userEmail;
         isSynced= false;
 
     }

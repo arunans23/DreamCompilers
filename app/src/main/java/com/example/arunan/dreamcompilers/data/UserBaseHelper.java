@@ -31,6 +31,7 @@ public class UserBaseHelper extends SQLiteOpenHelper {
                 UserTable.Cols.ROLE_ID + ")"
 
         );
+        //db.execSQL("insert into " + UserTable.NAME + "(" + UserTable.Cols.FULLNAME + ", " + UserTable.Cols.EMAIL + ", " + UserTable.Cols.PASSWORD  + ") values (?, ?, ?);");
     }
 
     @Override

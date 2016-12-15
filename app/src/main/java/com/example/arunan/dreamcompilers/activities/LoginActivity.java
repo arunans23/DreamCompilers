@@ -110,6 +110,7 @@ public class LoginActivity extends Activity{
         }else{
             if (mUserInfo.getEmail().equals(email) && mUserInfo.getPassword().equals(password)){
                 Intent intent = DiseaseListActivity.newIntent(this, email);
+                startActivity(intent);
                 finish();
             }else if(mUserInfo.getEmail().equals(email)) {
                 Toast.makeText(getApplicationContext(),

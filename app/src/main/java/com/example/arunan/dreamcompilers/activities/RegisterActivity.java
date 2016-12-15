@@ -110,11 +110,28 @@ public class RegisterActivity extends Activity {
 
     }
 
+    private void registerUser(final String name, final String email,
+                              final String password, final String location, final String role){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setFullName(name);
+        userInfo.setEmail(email);
+        userInfo.setPassword(password);
+        //userInfo.setDate(new Date());
+        userInfo.setRoleId(role);
+        userInfo.setLocation(location);
+        mUserLab.addUser(userInfo);
+
+        Intent i = new Intent(getApplicationContext(),
+                LoginActivity.class);
+        startActivity(i);
+        finish();
+    }
+
     /**
      * Function to store user in MySQL database will post params(tag, name,
      * email, password) to register url
      * */
-    private void registerUser(final String name, final String email,
+    private void registerOnlineUser(final String name, final String email,
                               final String password, final String location, final String role) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";

@@ -47,7 +47,7 @@ public class UserLab {
 
     public UserInfo getUser(String email){
         UserCursorWrapper cursor = queryUsers(
-                UserTable.Cols.UUID + " = ?",
+                UserTable.Cols.EMAIL + " = ?",
                 new String[] {email}
         );
 
