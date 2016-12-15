@@ -35,5 +35,13 @@
 
     </string-array>
 
+    <string-array name="register_role_entries">
+        <item>Patient</item>
+        <item>Doctor</item>
+        <item>Health Officer</item>
+
+
+    </string-array>
+
 
 </resources>

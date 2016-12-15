@@ -27,6 +27,7 @@ public class DiseaseCursorWrapper extends CursorWrapper{
         long date = getLong(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.DATE));
         long last_edit_date = getLong(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.LAST_EDIT_DATE));
         int isSynced = getInt(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.SYNCED));
+        String userID = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.USER_EMAIL));
 
         Disease disease = new Disease(UUID.fromString(uuidString));
         disease.setTitle(title);
@@ -36,6 +37,7 @@ public class DiseaseCursorWrapper extends CursorWrapper{
         disease.setDate(new Date(date));
         disease.setLastEditDate(new Date(last_edit_date));
         disease.setSynced(isSynced != 0);
+        disease.setUserEmail(userID);
 
         return disease;
     }

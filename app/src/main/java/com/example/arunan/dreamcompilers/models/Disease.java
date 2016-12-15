@@ -16,7 +16,7 @@ public class Disease {
     private int mNoVictims;
     private Date mDate;
     private Date mLastEditDate;
-    private UUID mUserId;
+    private String mUserEmail;
     private boolean isSynced;
 
     //constructor to call when entering new crime
@@ -86,12 +86,12 @@ public class Disease {
         mNoVictims = noVictims;
     }
 
-    public UUID getUserId() {
-        return mUserId;
+    public String getUserEmail() {
+        return mUserEmail;
     }
 
-    public void setUserId(UUID userId) {
-        mUserId = userId;
+    public void setUserEmail(String userEmail) {
+        mUserEmail = userEmail;
     }
 
     public boolean isSynced() {

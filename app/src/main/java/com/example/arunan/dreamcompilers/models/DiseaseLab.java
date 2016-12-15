@@ -59,6 +59,28 @@ public class DiseaseLab {
         return diseases;
     }
 
+    public List<Disease> getUserDiseases(String userEmail){
+
+        List<Disease> userDiseases = new ArrayList<>();
+        DiseaseCursorWrapper cursor = queryDiseases(
+                DiseaseTable.Cols.USER_EMAIL + " = ?",
+                new String[] {userEmail}
+        );
+
+        try{
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()){
+                userDiseases.add(cursor.getDisease());
+                cursor.moveToNext();
+            }
+        }finally {
+            cursor.close();
+        }
+
+        return userDiseases;
+    }
+
     public void addDisease(Disease disease){
         ContentValues values = getContentValues(disease);
 
@@ -103,7 +125,7 @@ public class DiseaseLab {
         values.put(DiseaseTable.Cols.DATE, disease.getDate().getTime());
         values.put(DiseaseTable.Cols.LAST_EDIT_DATE, disease.getLastEditDate().getTime());
         values.put(DiseaseTable.Cols.SYNCED, disease.isSynced() ? 1 : 0 );
-
+        values.put(DiseaseTable.Cols.USER_EMAIL, disease.getUserEmail());
         return values;
     }
 

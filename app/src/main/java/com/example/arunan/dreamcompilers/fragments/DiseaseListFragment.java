@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.arunan.dreamcompilers.activities.DiseaseListActivity;
 import com.example.arunan.dreamcompilers.models.Disease;
 import com.example.arunan.dreamcompilers.models.DiseaseLab;
 import com.example.arunan.dreamcompilers.activities.DiseasePagerActivity;
@@ -31,11 +32,13 @@ import java.util.List;
 public class DiseaseListFragment extends Fragment {
     private RecyclerView mDiseaseRecylcerView;
     private DiseaseAdapter mAdapter;
+    private String userEmail;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        userEmail = getArguments().getString(DiseaseListActivity.EXTRA_USER_EMAIl);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class DiseaseListFragment extends Fragment {
     //updateUI method for configuring user interfaces
     private void updateUI(){
         DiseaseLab diseaseLab = DiseaseLab.get(getActivity());
-        List<Disease> diseases = diseaseLab.getDiseases();
+        List<Disease> diseases = diseaseLab.getUserDiseases(userEmail);
 
         if (mAdapter == null){
             mAdapter = new DiseaseAdapter(diseases);

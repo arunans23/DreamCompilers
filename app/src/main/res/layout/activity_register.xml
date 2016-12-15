@@ -16,7 +16,7 @@
         android:paddingRight="20dp" >
 
         <EditText
-            android:id="@+id/name"
+            android:id="@+id/fullname"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -29,7 +29,7 @@
             android:textColorHint="@color/input_register_hint" />
 
         <EditText
-            android:id="@+id/register_username"
+            android:id="@+id/register_email"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -54,12 +54,23 @@
             android:textColor="@color/input_register"
             android:textColorHint="@color/input_register_hint" />
 
-        <Spinner android:id="@+id/user_role_spinner"
+        <Spinner android:id="@+id/user_district_spinner"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
                  android:prompt="@string/spinner_register_prompt"
                  android:entries="@array/register_district_entries"
                  android:background="@color/input_register_bg"
+                 android:padding="10dp"
+                 android:layout_marginBottom="10dp"
+            />
+
+        <Spinner android:id="@+id/user_role_spinner"
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:prompt="@string/spinner_register_prompt"
+                 android:entries="@array/register_role_entries"
+                 android:background="@color/input_register_bg"
+                 android:padding="10dp"
             />
 
         <!-- Login Button -->

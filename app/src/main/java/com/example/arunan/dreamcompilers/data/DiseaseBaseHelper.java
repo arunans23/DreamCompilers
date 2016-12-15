@@ -30,7 +30,8 @@ public class DiseaseBaseHelper extends SQLiteOpenHelper {
                 DiseaseTable.Cols.VICTIMCOUNT + ", " +
                 DiseaseTable.Cols.DATE + ", " +
                 DiseaseTable.Cols.LAST_EDIT_DATE + ", " +
-                DiseaseTable.Cols.SYNCED + ")"
+                DiseaseTable.Cols.SYNCED + ", " +
+                DiseaseTable.Cols.USER_EMAIL + ")"
         );
     }
 
