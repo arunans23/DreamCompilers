@@ -15,6 +15,7 @@ public class UserInfo {
     private String Location;
     private String mRoleId;
     private Date mDate;
+    private boolean mLogged;
 
     //constructor to call when entering new crime
     public UserInfo(){
@@ -82,5 +83,13 @@ public class UserInfo {
 
     public void setDate(Date date) {
         mDate = date;
+    }
+
+    public boolean isLogged() {
+        return mLogged;
+    }
+
+    public void setLogged(boolean login) {
+        mLogged = login;
     }
 }

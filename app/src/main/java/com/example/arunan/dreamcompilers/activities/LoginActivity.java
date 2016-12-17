@@ -18,6 +18,7 @@ import com.example.arunan.dreamcompilers.R;
 import com.example.arunan.dreamcompilers.app.AppConfig;
 import com.example.arunan.dreamcompilers.app.AppController;
 import com.example.arunan.dreamcompilers.app.SessionManager;
+import com.example.arunan.dreamcompilers.data.AndroidDatabaseManager;
 import com.example.arunan.dreamcompilers.models.UserInfo;
 import com.example.arunan.dreamcompilers.models.UserLab;
 
@@ -49,6 +50,7 @@ public class LoginActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         mEmailText = (EditText)findViewById(R.id.login_username);
         mPasswordText = (EditText)findViewById(R.id.login_password);
         mLoginButton = (Button) findViewById(R.id.btnLogin);
@@ -60,6 +62,13 @@ public class LoginActivity extends Activity{
         pDialog.setCancelable(false);
 
         mUserLab = UserLab.get(this);
+
+        UserInfo userInfo = mUserLab.getLoggedUser();
+        if (userInfo!=null){
+            Intent intent = DiseaseListActivity.newIntent(this, userInfo.getEmail());
+            startActivity(intent);
+            finish();
+        }
 
         mSessionManager = new SessionManager(getApplicationContext());
 
@@ -97,6 +106,16 @@ public class LoginActivity extends Activity{
                 finish();
             }
         });
+
+        Button button =(Button)findViewById(R.id.databaseCheck);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent dbmanager = new Intent(getApplicationContext(),AndroidDatabaseManager.class);
+                startActivity(dbmanager);
+            }
+        });
     }
 
     private void checkLogin(final String email, final String password){
@@ -109,6 +128,8 @@ public class LoginActivity extends Activity{
             //checkOnlineLogin(email, password);
         }else{
             if (mUserInfo.getEmail().equals(email) && mUserInfo.getPassword().equals(password)){
+                mUserInfo.setLogged(true);
+                mUserLab.updateUser(mUserInfo);
                 Intent intent = DiseaseListActivity.newIntent(this, email);
                 startActivity(intent);
                 finish();
@@ -147,24 +168,29 @@ public class LoginActivity extends Activity{
                         mSessionManager.setLogin(true);
 
                         // Now store the user in SQLite
-                        String uid = jObj.getString("uid");
+                        String email = jObj.getString("email");
 
                         JSONObject user = jObj.getJSONObject("user");
                         String fullname = user.getString("fullname");
-                        String email = user.getString("email");
+                        String userID = user.getString("userID");
+                        String password = user.getString("password");
                         String location = user.getString("location");
                         long date = user.getLong("date");
                         String roleID = user.getString("roleID");
 
-                        UserInfo userInfo = new UserInfo(UUID.fromString(uid));
+                        UserInfo userInfo = new UserInfo(UUID.fromString(userID));
                         userInfo.setFullName(fullname);
                         userInfo.setEmail(email);
+                        userInfo.setPassword(password);
                         userInfo.setDate(new Date(date));
                         userInfo.setLocation(location);
                         userInfo.setRoleId(roleID);
 
                         // Inserting row in users table
                         mUserLab.addUser(userInfo);
+
+                        JSONObject diseases = jObj.getJSONObject("diseases");
+
 
                         // Launch main activity
                         /*

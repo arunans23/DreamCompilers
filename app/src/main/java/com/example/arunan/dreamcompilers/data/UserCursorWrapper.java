@@ -29,6 +29,7 @@ public class UserCursorWrapper extends CursorWrapper {
         long date = getLong(getColumnIndex(UserTable.Cols.DATE));
         String location = getString(getColumnIndex(UserTable.Cols.LOCATION));
         String roleID = getString(getColumnIndex(UserTable.Cols.ROLE_ID));
+        int login = getInt(getColumnIndex((UserTable.Cols.LOGIN)));
 
         UserInfo userInfo = new UserInfo(UUID.fromString(uuidString));
         userInfo.setFullName(fullName);
@@ -37,6 +38,7 @@ public class UserCursorWrapper extends CursorWrapper {
         userInfo.setDate(new Date(date));
         userInfo.setLocation(location);
         userInfo.setRoleId(roleID);
+        userInfo.setLogged(login!=0);
 
 
         return userInfo;

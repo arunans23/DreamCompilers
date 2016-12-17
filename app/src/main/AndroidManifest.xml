@@ -33,6 +33,8 @@
             android:parentActivityName=".activities.DiseaseListActivity">
 
         </activity>
+        <activity android:name=".data.AndroidDatabaseManager"
+                  android:theme="@style/Theme.AppCompat.Light"/>
     </application>
 
 </manifest>

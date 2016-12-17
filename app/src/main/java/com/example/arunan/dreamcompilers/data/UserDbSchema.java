@@ -17,6 +17,7 @@ public class UserDbSchema {
             public static final String LOCATION = "location";
             public static final String DATE = "date";
             public static final String ROLE_ID = "roleID";
+            public static final String LOGIN = "login";
         }
     }
 }

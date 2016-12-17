@@ -85,7 +85,7 @@ public class RegisterActivity extends Activity {
                 String email = mEmailText.getText().toString().trim();
                 String password = mPasswordText.getText().toString().trim();
                 String location = mDistrict.getSelectedItem().toString();
-                String role = mDistrict.getSelectedItem().toString();
+                String role = mRole.getSelectedItem().toString();
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
                     registerUser(name, email, password, location, role);

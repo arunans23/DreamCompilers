@@ -63,6 +63,24 @@ public class UserLab {
         }
     }
 
+    public UserInfo getLoggedUser(){
+        UserCursorWrapper cursor = queryUsers(
+                UserTable.Cols.LOGIN + " = 1",
+                null
+        );
+
+        try{
+            if (cursor.getCount() == 0 ){
+                return null;
+            }
+
+            cursor.moveToFirst();
+            return cursor.getUserInfo();
+        } finally {
+            cursor.close();
+        }
+    }
+
 
     //use to contentvalues to insert and update database queries
     private static ContentValues getContentValues(UserInfo userInfo){
@@ -74,7 +92,7 @@ public class UserLab {
         values.put(UserTable.Cols.LOCATION, userInfo.getLocation());
         values.put(UserTable.Cols.DATE, userInfo.getDate().getTime());
         values.put(UserTable.Cols.ROLE_ID, userInfo.getRoleId());
-
+        values.put(UserTable.Cols.LOGIN, userInfo.isLogged() ? 1 : 0);
         return values;
     }
 
@@ -89,5 +107,15 @@ public class UserLab {
                 null // orderBy
         );
         return new UserCursorWrapper(cursor);
+    }
+
+
+
+    public void updateUser(UserInfo userInfo) {
+        String email = userInfo.getEmail();
+        ContentValues values = getContentValues(userInfo);
+
+        mDatabase.update(UserTable.NAME, values, UserTable.Cols.EMAIL + " = ?",
+                new String[] {email});
     }
 }

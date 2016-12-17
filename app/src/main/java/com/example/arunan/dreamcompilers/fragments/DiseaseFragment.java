@@ -130,6 +130,7 @@ public class DiseaseFragment extends Fragment {
             }
         });
 
+        //mVictimCount.setVisibility(View.INVISIBLE);
 
 
 
