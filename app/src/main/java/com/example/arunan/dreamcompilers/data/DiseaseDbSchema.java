@@ -15,10 +15,9 @@ public class DiseaseDbSchema {
             public static final String SYMPTOMS = "symptoms";
             public static final String DESCRIPTION = "description";
             public static final String VICTIMCOUNT = "victims";
-            public static final String DATE = "date";
-            public static final String LAST_EDIT_DATE = "last_edit_date";
             public static final String SYNCED = "synced";
             public static final String USER_EMAIL = "user_email";
+            public static final String LOCATION = "location";
          }
     }
 }

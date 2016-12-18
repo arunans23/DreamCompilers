@@ -1,22 +1,29 @@
 package com.example.arunan.dreamcompilers.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.arunan.dreamcompilers.R;
+import com.example.arunan.dreamcompilers.activities.DiseaseListActivity;
 import com.example.arunan.dreamcompilers.models.Disease;
 import com.example.arunan.dreamcompilers.models.DiseaseLab;
-import com.example.arunan.dreamcompilers.R;
 
-import java.util.Date;
 import java.util.UUID;
+
+import static com.example.arunan.dreamcompilers.R.menu.disease;
 
 /**
  * Created by arunan on 12/9/16.
@@ -29,8 +36,10 @@ public class DiseaseFragment extends Fragment {
     private TextView mTitleField;
     private EditText mSymptomsField;
     private EditText mDescriptionField;
-    private EditText mNoVictims;
     private NumberPicker mVictimCount;
+    private Spinner mDistrictSpinner;
+
+
 
     private static final String ARG_DISEASE_ID = "disease_id";
 
@@ -46,7 +55,7 @@ public class DiseaseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         //new disease gets created when Fragment is created
         UUID diseaseId = (UUID) getArguments().getSerializable(ARG_DISEASE_ID);
 
@@ -85,7 +94,7 @@ public class DiseaseFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mDisease.setSymptoms(s.toString());
-                mDisease.setLastEditDate(new Date());
+                mDisease.setSynced(false);
             }
 
             @Override
@@ -108,7 +117,7 @@ public class DiseaseFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mDisease.setDescription(s.toString());
-                mDisease.setLastEditDate(new Date());
+                mDisease.setSynced(false);
             }
 
             @Override
@@ -126,14 +135,42 @@ public class DiseaseFragment extends Fragment {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 mDisease.setNoVictims(newVal);
-                mDisease.setLastEditDate(new Date());
+                mDisease.setSynced(false);
             }
         });
 
         //mVictimCount.setVisibility(View.INVISIBLE);
 
+        mDistrictSpinner = (Spinner)v.findViewById(R.id.user_district_spinner);
+
 
 
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(disease, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_disease_save:
+                updateDisease();
+                Intent intent = DiseaseListActivity
+                        .newIntent(getActivity(), mDisease.getUserEmail());
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void updateDisease(){
+
+        mDisease.setLocation(mDistrictSpinner.getSelectedItem().toString());
     }
 }

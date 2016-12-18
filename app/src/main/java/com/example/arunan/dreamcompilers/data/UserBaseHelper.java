@@ -32,8 +32,6 @@ public class UserBaseHelper extends SQLiteOpenHelper {
                 UserTable.Cols.FULLNAME + ", " +
                 UserTable.Cols.EMAIL + ", " +
                 UserTable.Cols.PASSWORD  + ", " +
-                UserTable.Cols.LOCATION+ ", " +
-                UserTable.Cols.DATE + ", " +
                 UserTable.Cols.ROLE_ID + ", " +
                 UserTable.Cols.LOGIN + ")"
 

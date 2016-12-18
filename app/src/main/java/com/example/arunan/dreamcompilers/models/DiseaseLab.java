@@ -122,10 +122,9 @@ public class DiseaseLab {
         values.put(DiseaseTable.Cols.SYMPTOMS, disease.getSymptoms());
         values.put(DiseaseTable.Cols.DESCRIPTION, disease.getDescription());
         values.put(DiseaseTable.Cols.VICTIMCOUNT, disease.getNoVictims());
-        values.put(DiseaseTable.Cols.DATE, disease.getDate().getTime());
-        values.put(DiseaseTable.Cols.LAST_EDIT_DATE, disease.getLastEditDate().getTime());
         values.put(DiseaseTable.Cols.SYNCED, disease.isSynced() ? 1 : 0 );
         values.put(DiseaseTable.Cols.USER_EMAIL, disease.getUserEmail());
+        values.put(DiseaseTable.Cols.LOCATION, disease.getLocation());
         return values;
     }
 

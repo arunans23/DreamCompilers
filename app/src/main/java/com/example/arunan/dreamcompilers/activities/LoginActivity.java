@@ -25,7 +25,6 @@ import com.example.arunan.dreamcompilers.models.UserLab;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -44,6 +43,7 @@ public class LoginActivity extends Activity{
     private ProgressDialog pDialog;
     private SessionManager mSessionManager;
     private UserLab mUserLab;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,8 +182,6 @@ public class LoginActivity extends Activity{
                         userInfo.setFullName(fullname);
                         userInfo.setEmail(email);
                         userInfo.setPassword(password);
-                        userInfo.setDate(new Date(date));
-                        userInfo.setLocation(location);
                         userInfo.setRoleId(roleID);
 
                         // Inserting row in users table

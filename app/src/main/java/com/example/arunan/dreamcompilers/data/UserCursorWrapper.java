@@ -6,7 +6,6 @@ import android.database.CursorWrapper;
 import com.example.arunan.dreamcompilers.data.UserDbSchema.UserTable;
 import com.example.arunan.dreamcompilers.models.UserInfo;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -26,8 +25,6 @@ public class UserCursorWrapper extends CursorWrapper {
         String fullName = getString(getColumnIndex(UserTable.Cols.FULLNAME));
         String email = getString(getColumnIndex(UserTable.Cols.EMAIL));
         String password = getString(getColumnIndex(UserTable.Cols.PASSWORD));
-        long date = getLong(getColumnIndex(UserTable.Cols.DATE));
-        String location = getString(getColumnIndex(UserTable.Cols.LOCATION));
         String roleID = getString(getColumnIndex(UserTable.Cols.ROLE_ID));
         int login = getInt(getColumnIndex((UserTable.Cols.LOGIN)));
 
@@ -35,8 +32,6 @@ public class UserCursorWrapper extends CursorWrapper {
         userInfo.setFullName(fullName);
         userInfo.setEmail(email);
         userInfo.setPassword(password);
-        userInfo.setDate(new Date(date));
-        userInfo.setLocation(location);
         userInfo.setRoleId(roleID);
         userInfo.setLogged(login!=0);
 

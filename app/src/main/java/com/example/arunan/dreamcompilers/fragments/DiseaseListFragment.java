@@ -15,11 +15,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.arunan.dreamcompilers.R;
 import com.example.arunan.dreamcompilers.activities.DiseaseListActivity;
+import com.example.arunan.dreamcompilers.activities.DiseasePagerActivity;
+import com.example.arunan.dreamcompilers.activities.LoginActivity;
 import com.example.arunan.dreamcompilers.models.Disease;
 import com.example.arunan.dreamcompilers.models.DiseaseLab;
-import com.example.arunan.dreamcompilers.activities.DiseasePagerActivity;
-import com.example.arunan.dreamcompilers.R;
+import com.example.arunan.dreamcompilers.models.UserInfo;
+import com.example.arunan.dreamcompilers.models.UserLab;
 
 import java.util.List;
 
@@ -33,12 +36,14 @@ public class DiseaseListFragment extends Fragment {
     private RecyclerView mDiseaseRecylcerView;
     private DiseaseAdapter mAdapter;
     private String userEmail;
+    private UserLab mUserLab;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         userEmail = getArguments().getString(DiseaseListActivity.EXTRA_USER_EMAIl);
+        mUserLab = UserLab.get(getActivity());
     }
 
     @Override
@@ -92,6 +97,13 @@ public class DiseaseListFragment extends Fragment {
                         .newIntent(getActivity(), disease.getEntryId());
                 startActivity(intent);
                 return true;
+            case R.id.menu_item_logout:
+                UserInfo userInfo = mUserLab.getUser(userEmail);
+                userInfo.setLogged(false);
+                mUserLab.updateUser(userInfo);
+                Intent intentLog = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                startActivity(intentLog);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -102,6 +114,7 @@ public class DiseaseListFragment extends Fragment {
         private TextView mTitleTextView;
         private TextView mDateTextView;
         private CheckBox mCheckBox;
+
 
         private Disease mDisease;
 
@@ -115,12 +128,13 @@ public class DiseaseListFragment extends Fragment {
                     itemView.findViewById(R.id.list_item_disease_date_text_view);
             mCheckBox = (CheckBox)
                     itemView.findViewById(R.id.list_item_checkbox);
+
         }
 
         public void bindDisease(Disease disease){
             mDisease = disease;
             mTitleTextView.setText(mDisease.getTitle());
-            mDateTextView.setText(mDisease.getDate().toString());
+            mDateTextView.setText(mDisease.getLocation());
             mCheckBox.setChecked(mDisease.isSynced());
         }
 

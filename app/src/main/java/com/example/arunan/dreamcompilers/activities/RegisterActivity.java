@@ -25,7 +25,6 @@ import com.example.arunan.dreamcompilers.models.UserLab;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -44,7 +43,6 @@ public class RegisterActivity extends Activity {
     private EditText mFullNameText;
     private EditText mEmailText;
     private EditText mPasswordText;
-    private Spinner mDistrict;
     private Spinner mRole;
 
     private ProgressDialog pDialog;
@@ -61,7 +59,6 @@ public class RegisterActivity extends Activity {
         mPasswordText = (EditText)findViewById(R.id.register_password);
         mButtonRegister = (Button) findViewById(btnRegister);
         mRedirectLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
-        mDistrict = (Spinner) findViewById(R.id.user_district_spinner);
         mRole = (Spinner) findViewById(R.id.user_role_spinner);
 
         pDialog = new ProgressDialog(this);
@@ -84,11 +81,10 @@ public class RegisterActivity extends Activity {
                 String name = mFullNameText.getText().toString().trim();
                 String email = mEmailText.getText().toString().trim();
                 String password = mPasswordText.getText().toString().trim();
-                String location = mDistrict.getSelectedItem().toString();
                 String role = mRole.getSelectedItem().toString();
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-                    registerUser(name, email, password, location, role);
+                    registerUser(name, email, password, role);
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Please enter your details!", Toast.LENGTH_LONG)
@@ -111,14 +107,12 @@ public class RegisterActivity extends Activity {
     }
 
     private void registerUser(final String name, final String email,
-                              final String password, final String location, final String role){
+                              final String password, final String role){
         UserInfo userInfo = new UserInfo();
         userInfo.setFullName(name);
         userInfo.setEmail(email);
         userInfo.setPassword(password);
-        //userInfo.setDate(new Date());
         userInfo.setRoleId(role);
-        userInfo.setLocation(location);
         mUserLab.addUser(userInfo);
 
         Intent i = new Intent(getApplicationContext(),
@@ -132,7 +126,7 @@ public class RegisterActivity extends Activity {
      * email, password) to register url
      * */
     private void registerOnlineUser(final String name, final String email,
-                              final String password, final String location, final String role) {
+                              final String password, final String role) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
@@ -165,9 +159,7 @@ public class RegisterActivity extends Activity {
                         UserInfo userInfo = new UserInfo(UUID.fromString(uid));
                         userInfo.setFullName(fullname);
                         userInfo.setEmail(email);
-                        userInfo.setDate(new Date(date));
                         userInfo.setRoleId(roleID);
-                        userInfo.setLocation(location);
                         // Inserting row in users table
                         mUserLab.addUser(userInfo);
 
@@ -210,7 +202,6 @@ public class RegisterActivity extends Activity {
                 params.put("fullname", name);
                 params.put("email", email);
                 params.put("password", password);
-                params.put("location", location);
 
                 return params;
             }

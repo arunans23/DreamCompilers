@@ -89,8 +89,6 @@ public class UserLab {
         values.put(UserTable.Cols.FULLNAME, userInfo.getFullName());
         values.put(UserTable.Cols.EMAIL, userInfo.getEmail());
         values.put(UserTable.Cols.PASSWORD, userInfo.getPassword());
-        values.put(UserTable.Cols.LOCATION, userInfo.getLocation());
-        values.put(UserTable.Cols.DATE, userInfo.getDate().getTime());
         values.put(UserTable.Cols.ROLE_ID, userInfo.getRoleId());
         values.put(UserTable.Cols.LOGIN, userInfo.isLogged() ? 1 : 0);
         return values;

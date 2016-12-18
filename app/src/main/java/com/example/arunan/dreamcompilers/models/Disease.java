@@ -1,7 +1,5 @@
 package com.example.arunan.dreamcompilers.models;
 
-import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -14,17 +12,13 @@ public class Disease {
     private String mSymptoms;
     private String mDescription;
     private int mNoVictims;
-    private Date mDate;
-    private Date mLastEditDate;
     private String mUserEmail;
     private boolean isSynced;
+    private String mLocation;
 
     //constructor to call when entering new crime
     public Disease(String userEmail){
         this(UUID.randomUUID());
-        mDate = new Date();
-        mTitle = "disease" + new Random().nextInt(10000);
-        mLastEditDate = new Date();
         mUserEmail = userEmail;
         isSynced= false;
 
@@ -51,13 +45,6 @@ public class Disease {
         return mSymptoms;
     }
 
-    public Date getDate() {
-        return mDate;
-    }
-
-    public void setDate(Date date){
-        mDate = date;
-    }
 
     public void setSymptoms(String symptoms) {
         mSymptoms = symptoms;
@@ -71,13 +58,6 @@ public class Disease {
         mDescription = description;
     }
 
-    public Date getLastEditDate() {
-        return mLastEditDate;
-    }
-
-    public void setLastEditDate(Date lastEditDate) {
-        mLastEditDate = lastEditDate;
-    }
 
     public int getNoVictims() {
         return mNoVictims;
@@ -101,5 +81,13 @@ public class Disease {
 
     public void setSynced(boolean synced) {
         isSynced = synced;
+    }
+
+    public String getLocation() {
+        return mLocation;
+    }
+
+    public void setLocation(String location) {
+        mLocation = location;
     }
 }

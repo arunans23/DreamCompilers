@@ -1,6 +1,5 @@
 package com.example.arunan.dreamcompilers.models;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -12,15 +11,12 @@ public class UserInfo {
     private String mFullName;
     private String mEmail;
     private String mPassword;
-    private String Location;
     private String mRoleId;
-    private Date mDate;
     private boolean mLogged;
 
     //constructor to call when entering new crime
     public UserInfo(){
         this(UUID.randomUUID());
-        mDate = new Date();
 
     }
 
@@ -61,28 +57,12 @@ public class UserInfo {
         mPassword = password;
     }
 
-    public String getLocation() {
-        return Location;
-    }
-
-    public void setLocation(String location) {
-        Location = location;
-    }
-
     public String getRoleId() {
         return mRoleId;
     }
 
     public void setRoleId(String roleId) {
         mRoleId = roleId;
-    }
-
-    public Date getDate() {
-        return mDate;
-    }
-
-    public void setDate(Date date) {
-        mDate = date;
     }
 
     public boolean isLogged() {
