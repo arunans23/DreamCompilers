@@ -8,10 +8,13 @@ import java.util.UUID;
 
 public class UserInfo {
     private UUID mUserId;
-    private String mFullName;
+    private String mFirstName;
+    private String mMiddleName;
+    private String mLastName;
     private String mEmail;
     private String mPassword;
     private String mRoleId;
+    private String mPhoneNumber;
     private boolean mLogged;
 
     //constructor to call when entering new crime
@@ -33,12 +36,36 @@ public class UserInfo {
         mUserId = userId;
     }
 
-    public String getFullName() {
-        return mFullName;
+    public String getFirstName() {
+        return mFirstName;
     }
 
-    public void setFullName(String fullName) {
-        mFullName = fullName;
+    public void setFirstName(String firstName) {
+        mFirstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return mMiddleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        mMiddleName = middleName;
+    }
+
+    public String getLastName() {
+        return mLastName;
+    }
+
+    public void setLastName(String lastName) {
+        mLastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return mPhoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        mPhoneNumber = phoneNumber;
     }
 
     public String getEmail() {

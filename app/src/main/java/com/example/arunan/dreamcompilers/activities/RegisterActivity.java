@@ -27,7 +27,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.example.arunan.dreamcompilers.R.id.btnRegister;
 
@@ -44,6 +43,8 @@ public class RegisterActivity extends Activity {
     private EditText mEmailText;
     private EditText mPasswordText;
     private Spinner mRole;
+
+    UserInfo mUserInfo;
 
     private ProgressDialog pDialog;
     private SessionManager mSessionManager;
@@ -67,6 +68,8 @@ public class RegisterActivity extends Activity {
         mSessionManager = new SessionManager(getApplicationContext());
 
         mUserLab = UserLab.get(this);
+        mUserInfo = new UserInfo();
+
         if (mSessionManager.isLoggedIn()) {
             // User is already logged in. Take him to main activity
             Intent intent = new Intent(RegisterActivity.this,
@@ -82,9 +85,19 @@ public class RegisterActivity extends Activity {
                 String email = mEmailText.getText().toString().trim();
                 String password = mPasswordText.getText().toString().trim();
                 String role = mRole.getSelectedItem().toString();
+                String roleID;
+                if (role=="Patient"){
+                    roleID = "ROLE_APP_USER";
+                }else if (role == "Doctor"){
+                    roleID = "ROLE_DOCTOR";
+                }else if(role=="Health Officer"){
+                    roleID = "ROLE_HEALTH_OFFICE";
+                } else {
+                    roleID = "ROLE_USER";
+                }
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-                    registerUser(name, email, password, role);
+                    registerUser(name, email, password, roleID);
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Please enter your details!", Toast.LENGTH_LONG)
@@ -108,17 +121,19 @@ public class RegisterActivity extends Activity {
 
     private void registerUser(final String name, final String email,
                               final String password, final String role){
-        UserInfo userInfo = new UserInfo();
-        userInfo.setFullName(name);
-        userInfo.setEmail(email);
-        userInfo.setPassword(password);
-        userInfo.setRoleId(role);
-        mUserLab.addUser(userInfo);
 
+        mUserInfo.setFullName(name);
+        mUserInfo.setEmail(email);
+        mUserInfo.setPassword(password);
+        mUserInfo.setRoleId(role);
+
+        registerOnlineUser(name, email, password, role);
+        /*
         Intent i = new Intent(getApplicationContext(),
                 LoginActivity.class);
         startActivity(i);
         finish();
+        */
     }
 
     /**
@@ -147,30 +162,30 @@ public class RegisterActivity extends Activity {
                     if (!error) {
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
-                        String uid = jObj.getString("uid");
 
-                        JSONObject user = jObj.getJSONObject("user");
-                        String fullname = user.getString("fullname");
-                        String email = user.getString("email");
-                        long date = user.getLong("date");
-                        String roleID = user.getString("roleID");
-                        String location = user.getString("location");
+                        boolean validated = jObj.getBoolean("validated");
 
-                        UserInfo userInfo = new UserInfo(UUID.fromString(uid));
-                        userInfo.setFullName(fullname);
-                        userInfo.setEmail(email);
-                        userInfo.setRoleId(roleID);
-                        // Inserting row in users table
-                        mUserLab.addUser(userInfo);
+                        if(validated){
+                            Toast.makeText(getApplicationContext(),
+                                    "User successfully registered. Try login now!",
+                                    Toast.LENGTH_LONG)
+                                    .show();
 
-                        Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(),
+                                    "Details submitted for validation. Try login later!",
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
 
                         // Launch login activity
+
                         Intent intent = new Intent(
                                 RegisterActivity.this,
                                 LoginActivity.class);
                         startActivity(intent);
                         finish();
+
                     } else {
 
                         // Error occurred in registration. Get the error
@@ -182,6 +197,9 @@ public class RegisterActivity extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+
+                Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
 
             }
         }, new Response.ErrorListener() {
@@ -197,11 +215,26 @@ public class RegisterActivity extends Activity {
 
             @Override
             protected Map<String, String> getParams() {
+
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("username", "check");
+                    json.put("email", email);
+                    json.put("password", password);
+                    json.put("firstName", "checkFirstName");
+                    json.put("secondName", "checkSecondName");
+                    json.put("lastName", "checkLastName");
+                    json.put("role", role);
+                    json.put("phone", 0766016272);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String jsonString = json.toString();
                 // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("fullname", name);
-                params.put("email", email);
-                params.put("password", password);
+                params.put("data", jsonString);
+
 
                 return params;
             }
