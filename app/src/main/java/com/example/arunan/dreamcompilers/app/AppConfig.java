@@ -6,7 +6,7 @@ package com.example.arunan.dreamcompilers.app;
 
 public class AppConfig {
     //user login url
-    public static String sURLlogin = "http://10.0.2.2:8000/api/register";
+    public static String sURLlogin = "http://10.0.2.2:8000/api/login";
 
     //user register url
 //    public static String sURLregister = "http://192.168.43.26:8000/api/register";

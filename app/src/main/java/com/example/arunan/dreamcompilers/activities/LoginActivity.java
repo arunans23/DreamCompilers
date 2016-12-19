@@ -3,16 +3,23 @@ package com.example.arunan.dreamcompilers.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.arunan.dreamcompilers.R;
+import com.example.arunan.dreamcompilers.app.AppConfig;
+import com.example.arunan.dreamcompilers.app.AppController;
 import com.example.arunan.dreamcompilers.data.AndroidDatabaseManager;
+import com.example.arunan.dreamcompilers.models.Disease;
+import com.example.arunan.dreamcompilers.models.DiseaseLab;
 import com.example.arunan.dreamcompilers.models.UserInfo;
 import com.example.arunan.dreamcompilers.models.UserLab;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +35,7 @@ public class LoginActivity extends Activity{
     private EditText mUserNameText;
     private EditText mPasswordText;
     private UserLab mUserLab;
+    private DiseaseLab mDiseaseLab;
 
 
     @Override
@@ -35,13 +43,13 @@ public class LoginActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         mUserNameText = (EditText)findViewById(R.id.login_username);
         mPasswordText = (EditText)findViewById(R.id.login_password);
         mLoginButton = (Button) findViewById(R.id.btnLogin);
         mRegisterRedirect = (Button) findViewById(R.id.btnLinkToRegisterScreen);
 
         mUserLab = UserLab.get(this);
+        mDiseaseLab = DiseaseLab.get(this);
 
         UserInfo userInfo = mUserLab.getLoggedUser();
         if (userInfo!=null){
@@ -49,6 +57,9 @@ public class LoginActivity extends Activity{
             startActivity(intent);
             finish();
         }
+
+        String responceCheck = "{\"error\":false,\"errorMsg\":\"login success\",\"tokn\":\"168908dd3227b8358eababa07fcaf091\",\"user\":{\"username\":\"shan\",\"password\":\"shan\",\"email\":\"shan\",\"firstName\":\"shan\",\"middleName\":\"shan\",\"phone\":\"shan\"},\"data\":[{\"diseaseDataId\":\"d01\",\"sysmptoms\":\"puka ridenawa\",\"description\":\"thiyanawa\",\"victimCount\":\"213\",\"locationCode\":\"81000\",\"entryId\":\"e01\"}]}";
+        processResponse(responceCheck);
 
         mLoginButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -90,42 +101,102 @@ public class LoginActivity extends Activity{
     }
 
     private void checkLogin(final String username, final String password){
-        UserInfo mUserInfo = mUserLab.getUser(username);
-        mUserInfo.setLogged(true);
-        mUserLab.updateUser(mUserInfo);
 
-
-    }
-
-    private void checkOnlineLogin(final String username, final String password){
-        String tag_string_req = "req_login";
-
-
-
-    }
-
-    private void processResponse(String response){
+        JSONObject json = new JSONObject();
         try {
-            JSONObject jsonRes = new JSONObject(response);
-            boolean error = jsonRes.getBoolean("error");
-            String token = jsonRes.getString("tokn");
+            json.put("username", username);
+            json.put("password" , password);
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "JSON error", Toast.LENGTH_SHORT);
+            e.printStackTrace();
+        }
 
-            if (!error){
-                JSONObject jsonUser = jsonRes.getJSONObject("user");
-                String username = jsonRes.getString("username");
-                String password = jsonRes.getString("password");
-                String email = jsonRes.getString("email");
-                String firstName = jsonRes.getString("firstName");
-                String middleName = jsonRes.getString("middleName");
-                String phone = jsonRes.getString("phone");
+        final String jsonString = json.toString();
+        Log.d(TAG, jsonString);
 
-                UserInfo userInfo = new UserInfo(username);
+        final AppController request = new AppController(1,this);
+        request.set_server_url(AppConfig.sURLregister);
 
-            }else{
-                Toast.makeText(this, token, Toast.LENGTH_LONG).show();
-            }
+        request.setParams("data", jsonString);
+        request.setRequestTag(TAG);
+        request.setProgessDialog("Logging in...");
+
+        try {
+            String req = request.sendRequest();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        CountDownTimer timer = new CountDownTimer(2000, 1000) {
+            @Override
+            public void onFinish() {processResponse(request.getResponse()); }
+
+            @Override
+            public void onTick(long millisLeft) {
+            }
+        };
+        timer.start();
+    }
+
+
+    private void processResponse(String response){
+        if(response == ""){
+            Toast.makeText(this,"Server Timeout", Toast.LENGTH_LONG).show();
+        }else{
+            try {
+                JSONObject jsonRes = new JSONObject(response);
+                boolean error = jsonRes.getBoolean("error");
+                String errorMsg = jsonRes.getString("errorMsg");
+                String token = jsonRes.getString("tokn");
+
+                if (!error){
+                    JSONObject jsonUser = jsonRes.getJSONObject("user");
+                    String username = jsonUser.getString("username");
+                    String password = jsonUser.getString("password");
+                    String email = jsonUser.getString("email");
+                    String firstName = jsonUser.getString("firstName");
+                    String middleName = jsonUser.getString("middleName");
+                    String phone = jsonUser.getString("phone");
+                    //String role = jsonUser.getString("role");
+
+                    UserInfo userInfo = new UserInfo(username);
+                    userInfo.setPassword(password);
+                    //userInfo.setRoleId(role);
+                    userInfo.setToken(token);
+                    userInfo.setLogged(true);
+
+                    mUserLab.addUser(userInfo);
+
+                    JSONArray diseaseArray = jsonRes.getJSONArray("data");
+                    for (int m=0; m < diseaseArray.length(); m++){
+                        JSONObject diseaseObject =diseaseArray.getJSONObject(m);
+                        String diseaseTitle = diseaseObject.getString("diseaseDataId");
+                        String diseaseSymptoms = diseaseObject.getString("sysmptoms");
+                        String diseaseDescription = diseaseObject.getString("description");
+                        int diseaseVictimCount = diseaseObject.getInt("victimCount");
+                        String locationCode = diseaseObject.getString("locationCode");
+
+                        Disease disease = new Disease(username);
+                        disease.setSymptoms(diseaseSymptoms);
+                        disease.setDescription(diseaseDescription);
+                        disease.setLocation(locationCode);
+                        disease.setNoVictims(diseaseVictimCount);
+
+                        mDiseaseLab.addDisease(disease);
+                    }
+
+                    Intent i = DiseaseListActivity.newIntent(this, username);
+                    startActivity(i);
+                    finish();
+
+                }else{
+                    Toast.makeText(this, token, Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(this, "JSON PARSE ERROR", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
+
     }
 }
