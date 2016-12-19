@@ -1,7 +1,6 @@
 package com.example.arunan.dreamcompilers.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,9 +34,8 @@ public class LoginActivity extends Activity{
 
     private Button mLoginButton;
     private Button mRegisterRedirect;
-    private EditText mEmailText;
+    private EditText mUserNameText;
     private EditText mPasswordText;
-    private ProgressDialog pDialog;
     private UserLab mUserLab;
 
 
@@ -47,36 +45,29 @@ public class LoginActivity extends Activity{
         setContentView(R.layout.activity_login);
 
 
-        mEmailText = (EditText)findViewById(R.id.login_username);
+        mUserNameText = (EditText)findViewById(R.id.login_username);
         mPasswordText = (EditText)findViewById(R.id.login_password);
         mLoginButton = (Button) findViewById(R.id.btnLogin);
         mRegisterRedirect = (Button) findViewById(R.id.btnLinkToRegisterScreen);
-
-        //progress dialog
-
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
 
         mUserLab = UserLab.get(this);
 
         UserInfo userInfo = mUserLab.getLoggedUser();
         if (userInfo!=null){
-            Intent intent = DiseaseListActivity.newIntent(this, userInfo.getEmail());
+            Intent intent = DiseaseListActivity.newIntent(this, userInfo.getUsername());
             startActivity(intent);
             finish();
         }
 
-
-
         mLoginButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String email = mEmailText.getText().toString().trim();
+                String username = mUserNameText.getText().toString().trim();
                 String password = mPasswordText.getText().toString().trim();
 
-                if (!email.isEmpty() && !password.isEmpty()) {
+                if (!username.isEmpty() && !password.isEmpty()) {
                     // login user
-                    checkLogin(email, password);
+                    checkLogin(username, password);
                 } else {
                     // Prompt user to enter credentials
                     Toast.makeText(getApplicationContext(),
@@ -96,7 +87,7 @@ public class LoginActivity extends Activity{
             }
         });
 
-        Button button =(Button)findViewById(R.id.databaseCheck);
+        Button button = (Button)findViewById(R.id.databaseCheck);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -107,36 +98,16 @@ public class LoginActivity extends Activity{
         });
     }
 
-    private void checkLogin(final String email, final String password){
-        UserInfo mUserInfo = mUserLab.getUser(email);
-        if (mUserInfo==null){
-            Toast.makeText(getApplicationContext(),
-                    "User does not exist",
-                    Toast.LENGTH_SHORT)
-                    .show();
-            //checkOnlineLogin(email, password);
-        }else{
-            if (mUserInfo.getEmail().equals(email) && mUserInfo.getPassword().equals(password)){
-                mUserInfo.setLogged(true);
-                mUserLab.updateUser(mUserInfo);
-                Intent intent = DiseaseListActivity.newIntent(this, email);
-                startActivity(intent);
-                finish();
-            }else if(mUserInfo.getEmail().equals(email)) {
-                Toast.makeText(getApplicationContext(),
-                        "Email and Password do not match",
-                        Toast.LENGTH_SHORT)
-                        .show();
-            }
-        }
+    private void checkLogin(final String username, final String password){
+        UserInfo mUserInfo = mUserLab.getUser(username);
+        mUserInfo.setLogged(true);
+        mUserLab.updateUser(mUserInfo);
+
 
     }
 
-    private void checkOnlineLogin(final String email, final String password){
+    private void checkOnlineLogin(final String username, final String password){
         String tag_string_req = "req_login";
-
-        pDialog.setMessage("Logging in ...");
-        showDialog();
 
         StringRequest strReq = new StringRequest(Method.POST,
                 AppConfig.sURLlogin, new Response.Listener<String>() {
@@ -144,7 +115,6 @@ public class LoginActivity extends Activity{
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Login Response: " + response.toString());
-                hideDialog();
 
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -152,10 +122,7 @@ public class LoginActivity extends Activity{
 
                     // Check for error node in json
                     if (!error) {
-                        // user successfully logged in
-                        // Create login session
 
-                        // Now store the user in SQLite
                         String email = jObj.getString("email");
 
                         JSONObject user = jObj.getJSONObject("user");
@@ -205,7 +172,6 @@ public class LoginActivity extends Activity{
                 Log.e(TAG, "Login Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
-                hideDialog();
             }
         }) {
 
@@ -213,7 +179,7 @@ public class LoginActivity extends Activity{
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("email", email);
+                params.put("email", username);
                 params.put("password", password);
 
                 return params;
@@ -225,13 +191,28 @@ public class LoginActivity extends Activity{
         //AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
+    private void processResponse(String response){
+        try {
+            JSONObject jsonRes = new JSONObject(response);
+            boolean error = jsonRes.getBoolean("error");
+            String token = jsonRes.getString("tokn");
 
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+            if (!error){
+                JSONObject jsonUser = jsonRes.getJSONObject("user");
+                String username = jsonRes.getString("username");
+                String password = jsonRes.getString("password");
+                String email = jsonRes.getString("email");
+                String firstName = jsonRes.getString("firstName");
+                String middleName = jsonRes.getString("middleName");
+                String phone = jsonRes.getString("phone");
+
+                UserInfo userInfo = new UserInfo(username);
+
+            }else{
+                Toast.makeText(this, token, Toast.LENGTH_LONG).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

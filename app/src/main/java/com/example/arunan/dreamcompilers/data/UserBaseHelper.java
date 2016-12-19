@@ -33,7 +33,8 @@ public class UserBaseHelper extends SQLiteOpenHelper {
                 UserTable.Cols.USERNAME + ", " +
                 UserTable.Cols.PASSWORD + ", " +
                 UserTable.Cols.ROLE_ID + ", " +
-                UserTable.Cols.LOGIN + ")"
+                UserTable.Cols.LOGIN +
+                UserTable.Cols.TOKEN + ")"
         );
 
         db.execSQL("create table " + UserDetailTable.NAME + "(" +

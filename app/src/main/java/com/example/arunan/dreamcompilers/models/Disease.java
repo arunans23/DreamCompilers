@@ -12,14 +12,14 @@ public class Disease {
     private String mSymptoms;
     private String mDescription;
     private int mNoVictims;
-    private String mUserEmail;
+    private String mUserName;
     private boolean isSynced;
     private String mLocation;
 
     //constructor to call when entering new crime
-    public Disease(String userEmail){
+    public Disease(String userName){
         this(UUID.randomUUID());
-        mUserEmail = userEmail;
+        mUserName = userName;
         isSynced= false;
 
     }
@@ -67,12 +67,12 @@ public class Disease {
         mNoVictims = noVictims;
     }
 
-    public String getUserEmail() {
-        return mUserEmail;
+    public String getUserName() {
+        return mUserName;
     }
 
-    public void setUserEmail(String userEmail) {
-        mUserEmail = userEmail;
+    public void setUserName(String userName) {
+        mUserName = userName;
     }
 
     public boolean isSynced() {

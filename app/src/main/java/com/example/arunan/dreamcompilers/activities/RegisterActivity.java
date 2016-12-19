@@ -1,9 +1,9 @@
 package com.example.arunan.dreamcompilers.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.example.arunan.dreamcompilers.R;
 import com.example.arunan.dreamcompilers.app.AppConfig;
 import com.example.arunan.dreamcompilers.app.AppController;
@@ -43,10 +42,7 @@ public class RegisterActivity extends Activity {
 
     UserInfo mUserInfo;
 
-    private ProgressDialog pDialog;
     private UserLab mUserLab;
-
-    private RequestQueue mRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +60,7 @@ public class RegisterActivity extends Activity {
         mButtonRegister = (Button) findViewById(btnRegister);
         mRedirectLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
 
-
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
-
-
         mUserLab = UserLab.get(this);
-
 
         // Register Button Click event
         mButtonRegister.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +96,7 @@ public class RegisterActivity extends Activity {
             }
         });
 
+
         // Link to Login Screen
         mRedirectLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -121,11 +112,7 @@ public class RegisterActivity extends Activity {
     private void registerUser(final String firstname, final String middlename, final String lastname,
                                     final String email, final String username, final String password,
                                     final String phoneNumber, final String roleID) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_register";
 
-        pDialog.setMessage("Registering ...");
-        showDialog();
 
         JSONObject json = new JSONObject();
         try {
@@ -147,7 +134,10 @@ public class RegisterActivity extends Activity {
 
         final AppController request = new AppController(1,this);
         request.set_server_url(AppConfig.sURLregister);
+
         request.setParams("data", jsonString);
+        request.setRequestTag(TAG);
+        request.setProgessDialog("Registering ...");
 
         try {
             String req = request.sendRequest();
@@ -155,18 +145,45 @@ public class RegisterActivity extends Activity {
             e.printStackTrace();
         }
 
-        hideDialog();
+        CountDownTimer timer = new CountDownTimer(2000, 1000) {
+            @Override
+            public void onFinish() {processResponse(request.getResponse()); }
 
+            @Override
+            public void onTick(long millisLeft) {
+            }
+        };
+        timer.start();
 
     }
 
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
 
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+    private void processResponse(String response){
+        if(response == ""){
+            Toast.makeText(this, "Server Timeout", Toast.LENGTH_LONG).show();
+        }else{
+            try {
+                JSONObject jsonRes = new JSONObject(response);
+                boolean status = jsonRes.getBoolean("status");
+                String message = jsonRes.getString("message");
+
+                if (status){
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getApplicationContext(),
+                            LoginActivity.class);
+                    startActivity(i);
+                    finish();
+
+                }else{
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(this, response,Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
+
+
+
     }
 }

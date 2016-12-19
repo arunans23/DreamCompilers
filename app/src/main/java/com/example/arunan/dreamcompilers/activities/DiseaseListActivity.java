@@ -15,7 +15,7 @@ import com.example.arunan.dreamcompilers.fragments.DiseaseListFragment;
  */
 
 public class DiseaseListActivity extends AppCompatActivity {
-    public static final String EXTRA_USER_EMAIl = "com.example.arunan.dreamcompilers.user_name";
+    public static final String EXTRA_USER_NAME = "com.example.arunan.dreamcompilers.user_name";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,17 +34,17 @@ public class DiseaseListActivity extends AppCompatActivity {
 
     protected Fragment createFragment() {
         String userEmail = (String) getIntent()
-                .getSerializableExtra(EXTRA_USER_EMAIl);
+                .getSerializableExtra(EXTRA_USER_NAME);
         Bundle bundle = new Bundle();
-        bundle.putString(EXTRA_USER_EMAIl, userEmail);
+        bundle.putString(EXTRA_USER_NAME, userEmail);
         Fragment fragment = new DiseaseListFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static Intent newIntent(Context packageContext, String userEmail){
+    public static Intent newIntent(Context packageContext, String username){
         Intent intent = new Intent(packageContext, DiseaseListActivity.class);
-        intent.putExtra(EXTRA_USER_EMAIl, userEmail);
+        intent.putExtra(EXTRA_USER_NAME, username);
         return intent;
     }
 }

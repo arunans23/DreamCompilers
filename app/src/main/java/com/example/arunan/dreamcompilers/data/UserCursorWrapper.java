@@ -23,6 +23,7 @@ public class UserCursorWrapper extends CursorWrapper {
         String password = getString(getColumnIndex(UserTable.Cols.PASSWORD));
         String roleID = getString(getColumnIndex(UserTable.Cols.ROLE_ID));
         int login = getInt(getColumnIndex(UserTable.Cols.LOGIN));
+        String token = getString(getColumnIndex(UserTable.Cols.TOKEN));
 
 //        String firstName = getString(getColumnIndex(UserDetailTable.Cols.FIRSTNAME));
 //        String middleName = getString(getColumnIndex(UserDetailTable.Cols.MIDDLENAME));
@@ -38,6 +39,7 @@ public class UserCursorWrapper extends CursorWrapper {
         userInfo.setPassword(password);
         userInfo.setRoleId(roleID);
         userInfo.setLogged(login!=0);
+        userInfo.setToken(token);
 
 //        userInfo.setFirstName(firstName);
 //        userInfo.setMiddleName(middleName);

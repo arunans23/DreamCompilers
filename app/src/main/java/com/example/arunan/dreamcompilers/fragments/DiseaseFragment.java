@@ -160,7 +160,7 @@ public class DiseaseFragment extends Fragment {
             case R.id.menu_item_disease_save:
                 updateDisease();
                 Intent intent = DiseaseListActivity
-                        .newIntent(getActivity(), mDisease.getUserEmail());
+                        .newIntent(getActivity(), mDisease.getUserName());
                 startActivity(intent);
                 return true;
 

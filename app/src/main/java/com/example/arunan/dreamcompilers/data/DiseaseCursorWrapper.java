@@ -24,7 +24,7 @@ public class DiseaseCursorWrapper extends CursorWrapper{
         String description = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.DESCRIPTION));
         int victimCount = getInt(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.VICTIMCOUNT));
         int isSynced = getInt(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.SYNCED));
-        String userID = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.USER_EMAIL));
+        String username = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.USER_NAME));
         String location = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.LOCATION));
 
         Disease disease = new Disease(UUID.fromString(uuidString));
@@ -33,7 +33,7 @@ public class DiseaseCursorWrapper extends CursorWrapper{
         disease.setDescription(description);
         disease.setNoVictims(victimCount);
         disease.setSynced(isSynced != 0);
-        disease.setUserEmail(userID);
+        disease.setUserName(username);
         disease.setLocation(location);
 
         return disease;

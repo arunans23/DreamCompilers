@@ -59,12 +59,12 @@ public class DiseaseLab {
         return diseases;
     }
 
-    public List<Disease> getUserDiseases(String userEmail){
+    public List<Disease> getUserDiseases(String username){
 
         List<Disease> userDiseases = new ArrayList<>();
         DiseaseCursorWrapper cursor = queryDiseases(
-                DiseaseTable.Cols.USER_EMAIL + " = ?",
-                new String[] {userEmail}
+                DiseaseTable.Cols.USER_NAME + " = ?",
+                new String[] {username}
         );
 
         try{
@@ -123,7 +123,7 @@ public class DiseaseLab {
         values.put(DiseaseTable.Cols.DESCRIPTION, disease.getDescription());
         values.put(DiseaseTable.Cols.VICTIMCOUNT, disease.getNoVictims());
         values.put(DiseaseTable.Cols.SYNCED, disease.isSynced() ? 1 : 0 );
-        values.put(DiseaseTable.Cols.USER_EMAIL, disease.getUserEmail());
+        values.put(DiseaseTable.Cols.USER_NAME, disease.getUserName());
         values.put(DiseaseTable.Cols.LOCATION, disease.getLocation());
         return values;
     }

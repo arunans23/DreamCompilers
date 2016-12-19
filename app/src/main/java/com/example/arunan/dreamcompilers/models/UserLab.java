@@ -86,6 +86,7 @@ public class UserLab {
         values.put(UserTable.Cols.PASSWORD, userInfo.getPassword());
         values.put(UserTable.Cols.ROLE_ID, userInfo.getRoleId());
         values.put(UserTable.Cols.LOGIN, userInfo.isLogged() ? 1 : 0);
+        values.put(UserTable.Cols.TOKEN, userInfo.getToken());
         return values;
     }
 

@@ -15,6 +15,7 @@ public class UserDbSchema {
             public static final String PASSWORD = "password";
             public static final String ROLE_ID = "roleID";
             public static final String LOGIN = "login";
+            public static final String TOKEN = "token";
         }
     }
 

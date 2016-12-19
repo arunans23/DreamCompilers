@@ -35,14 +35,14 @@ import java.util.List;
 public class DiseaseListFragment extends Fragment {
     private RecyclerView mDiseaseRecylcerView;
     private DiseaseAdapter mAdapter;
-    private String userEmail;
+    private String username;
     private UserLab mUserLab;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        userEmail = getArguments().getString(DiseaseListActivity.EXTRA_USER_EMAIl);
+        username = getArguments().getString(DiseaseListActivity.EXTRA_USER_NAME);
         mUserLab = UserLab.get(getActivity());
     }
 
@@ -68,7 +68,7 @@ public class DiseaseListFragment extends Fragment {
     //updateUI method for configuring user interfaces
     private void updateUI(){
         DiseaseLab diseaseLab = DiseaseLab.get(getActivity());
-        List<Disease> diseases = diseaseLab.getUserDiseases(userEmail);
+        List<Disease> diseases = diseaseLab.getUserDiseases(username);
 
         if (mAdapter == null){
             mAdapter = new DiseaseAdapter(diseases);
@@ -91,14 +91,14 @@ public class DiseaseListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_disease:
-                Disease disease = new Disease(userEmail);
+                Disease disease = new Disease(username);
                 DiseaseLab.get(getActivity()).addDisease(disease);
                 Intent intent = DiseasePagerActivity
                         .newIntent(getActivity(), disease.getEntryId());
                 startActivity(intent);
                 return true;
             case R.id.menu_item_logout:
-                UserInfo userInfo = mUserLab.getUser(userEmail);
+                UserInfo userInfo = mUserLab.getUser(username);
                 userInfo.setLogged(false);
                 mUserLab.updateUser(userInfo);
                 Intent intentLog = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
