@@ -1,39 +1,59 @@
 package com.example.arunan.dreamcompilers.models;
 
-import java.util.UUID;
-
 /**
  * Created by arunan on 12/13/16.
  */
 
 public class UserInfo {
-    private UUID mUserId;
+
+    private String mToken;
+    private String mUsername;
+    private String mPassword;
+    private boolean mLogged;
+    private String mRoleId;
+
     private String mFirstName;
     private String mMiddleName;
     private String mLastName;
     private String mEmail;
-    private String mPassword;
-    private String mRoleId;
     private String mPhoneNumber;
-    private boolean mLogged;
+
+    private String mRoleName;
+    private int mAdminLevel;
+
 
     //constructor to call when entering new crime
-    public UserInfo(){
-        this(UUID.randomUUID());
+    public UserInfo(String userName){
+        mUsername = userName;
 
     }
 
-    //constructor to call when querying the database
-    public UserInfo(UUID id){
-        mUserId = id;
+    public String getUsername() {
+        return mUsername;
     }
 
-    public UUID getUserId() {
-        return mUserId;
+    public String getPassword() {
+        return mPassword;
     }
 
-    public void setUserId(UUID userId) {
-        mUserId = userId;
+    public void setPassword(String password) {
+        mPassword = password;
+    }
+
+    public boolean isLogged() {
+        return mLogged;
+    }
+
+    public void setLogged(boolean logged) {
+        mLogged = logged;
+    }
+
+    public String getRoleId() {
+        return mRoleId;
+    }
+
+    public void setRoleId(String roleId) {
+        mRoleId = roleId;
     }
 
     public String getFirstName() {
@@ -60,14 +80,6 @@ public class UserInfo {
         mLastName = lastName;
     }
 
-    public String getPhoneNumber() {
-        return mPhoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        mPhoneNumber = phoneNumber;
-    }
-
     public String getEmail() {
         return mEmail;
     }
@@ -76,27 +88,35 @@ public class UserInfo {
         mEmail = email;
     }
 
-    public String getPassword() {
-        return mPassword;
+    public String getPhoneNumber() {
+        return mPhoneNumber;
     }
 
-    public void setPassword(String password) {
-        mPassword = password;
+    public void setPhoneNumber(String phoneNumber) {
+        mPhoneNumber = phoneNumber;
     }
 
-    public String getRoleId() {
-        return mRoleId;
+    public String getRoleName() {
+        return mRoleName;
     }
 
-    public void setRoleId(String roleId) {
-        mRoleId = roleId;
+    public void setRoleName(String roleName) {
+        mRoleName = roleName;
     }
 
-    public boolean isLogged() {
-        return mLogged;
+    public int getAdminLevel() {
+        return mAdminLevel;
     }
 
-    public void setLogged(boolean login) {
-        mLogged = login;
+    public void setAdminLevel(int adminLevel) {
+        mAdminLevel = adminLevel;
+    }
+
+    public String getToken() {
+        return mToken;
+    }
+
+    public void setToken(String token) {
+        mToken = token;
     }
 }

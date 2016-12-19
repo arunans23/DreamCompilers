@@ -16,8 +16,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.arunan.dreamcompilers.R;
 import com.example.arunan.dreamcompilers.app.AppConfig;
-import com.example.arunan.dreamcompilers.app.AppController;
-import com.example.arunan.dreamcompilers.app.SessionManager;
 import com.example.arunan.dreamcompilers.data.AndroidDatabaseManager;
 import com.example.arunan.dreamcompilers.models.UserInfo;
 import com.example.arunan.dreamcompilers.models.UserLab;
@@ -27,7 +25,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by arunan on 12/13/16.
@@ -41,7 +38,6 @@ public class LoginActivity extends Activity{
     private EditText mEmailText;
     private EditText mPasswordText;
     private ProgressDialog pDialog;
-    private SessionManager mSessionManager;
     private UserLab mUserLab;
 
 
@@ -70,14 +66,7 @@ public class LoginActivity extends Activity{
             finish();
         }
 
-        mSessionManager = new SessionManager(getApplicationContext());
 
-        if (mSessionManager.isLoggedIn()){
-            Intent intent = new Intent(LoginActivity.this, DiseaseListActivity.class);
-            startActivity(intent);
-            finish();
-
-        }
 
         mLoginButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -165,7 +154,6 @@ public class LoginActivity extends Activity{
                     if (!error) {
                         // user successfully logged in
                         // Create login session
-                        mSessionManager.setLogin(true);
 
                         // Now store the user in SQLite
                         String email = jObj.getString("email");
@@ -178,14 +166,14 @@ public class LoginActivity extends Activity{
                         long date = user.getLong("date");
                         String roleID = user.getString("roleID");
 
-                        UserInfo userInfo = new UserInfo(UUID.fromString(userID));
-                        userInfo.setFullName(fullname);
-                        userInfo.setEmail(email);
-                        userInfo.setPassword(password);
-                        userInfo.setRoleId(roleID);
-
-                        // Inserting row in users table
-                        mUserLab.addUser(userInfo);
+//                        UserInfo userInfo = new UserInfo(UUID.fromString(userID));
+//                        userInfo.setFullName(fullname);
+//                        userInfo.setEmail(email);
+//                        userInfo.setPassword(password);
+//                        userInfo.setRoleId(roleID);
+//
+//                        // Inserting row in users table
+//                        mUserLab.addUser(userInfo);
 
                         JSONObject diseases = jObj.getJSONObject("diseases");
 
@@ -234,7 +222,7 @@ public class LoginActivity extends Activity{
         };
 
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        //AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private void showDialog() {

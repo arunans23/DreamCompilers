@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.arunan.dreamcompilers.data.UserBaseHelper;
 import com.example.arunan.dreamcompilers.data.UserCursorWrapper;
+import com.example.arunan.dreamcompilers.data.UserDbSchema.UserDetailTable;
+import com.example.arunan.dreamcompilers.data.UserDbSchema.UserRoleTable;
 import com.example.arunan.dreamcompilers.data.UserDbSchema.UserTable;
 
 /**
@@ -30,32 +32,26 @@ public class UserLab {
     }
 
     private UserLab(Context context){
-
         mContext = context.getApplicationContext();
         mDatabase = new UserBaseHelper(mContext)
                 .getWritableDatabase();
-
     }
 
-
-
     public void addUser(UserInfo userInfo){
-        ContentValues values = getContentValues(userInfo);
-
+        ContentValues values = getUserContentValues(userInfo);
         mDatabase.insert(UserTable.NAME, null, values);
     }
 
-    public UserInfo getUser(String email){
+    public UserInfo getUser(String username){
         UserCursorWrapper cursor = queryUsers(
-                UserTable.Cols.EMAIL + " = ?",
-                new String[] {email}
+                UserTable.Cols.USERNAME + " = ?",
+                new String[] {username}
         );
 
         try{
             if (cursor.getCount() == 0 ){
                 return null;
             }
-
             cursor.moveToFirst();
             return cursor.getUserInfo();
         } finally {
@@ -83,14 +79,30 @@ public class UserLab {
 
 
     //use to contentvalues to insert and update database queries
-    private static ContentValues getContentValues(UserInfo userInfo){
+
+    private static ContentValues getUserContentValues(UserInfo userInfo){
         ContentValues values = new ContentValues();
-        values.put(UserTable.Cols.UUID, userInfo.getUserId().toString());
-        values.put(UserTable.Cols.FULLNAME, userInfo.getFullName());
-        values.put(UserTable.Cols.EMAIL, userInfo.getEmail());
+        values.put(UserTable.Cols.USERNAME, userInfo.getUsername());
         values.put(UserTable.Cols.PASSWORD, userInfo.getPassword());
         values.put(UserTable.Cols.ROLE_ID, userInfo.getRoleId());
         values.put(UserTable.Cols.LOGIN, userInfo.isLogged() ? 1 : 0);
+        return values;
+    }
+
+    private static ContentValues getUserDetailContentValues(UserInfo userInfo){
+        ContentValues values = new ContentValues();
+        values.put(UserDetailTable.Cols.FIRSTNAME, userInfo.getFirstName());
+        values.put(UserDetailTable.Cols.MIDDLENAME, userInfo.getMiddleName());
+        values.put(UserDetailTable.Cols.LASTNAME, userInfo.getLastName());
+        values.put(UserDetailTable.Cols.EMAIL, userInfo.getEmail());
+        values.put(UserDetailTable.Cols.PHONENUMBER, userInfo.getPhoneNumber());
+        return values;
+    }
+
+    private static ContentValues getUserRoleContentValues(UserInfo userInfo){
+        ContentValues values = new ContentValues();
+        values.put(UserRoleTable.Cols.ROLENAME, userInfo.getRoleName());
+        values.put(UserRoleTable.Cols.ADMINLEVEL, userInfo.getAdminLevel());
         return values;
     }
 
@@ -110,10 +122,10 @@ public class UserLab {
 
 
     public void updateUser(UserInfo userInfo) {
-        String email = userInfo.getEmail();
-        ContentValues values = getContentValues(userInfo);
+        String username = userInfo.getUsername();
+        ContentValues values = getUserContentValues(userInfo);
 
-        mDatabase.update(UserTable.NAME, values, UserTable.Cols.EMAIL + " = ?",
-                new String[] {email});
+        mDatabase.update(UserTable.NAME, values, UserTable.Cols.USERNAME + " = ?",
+                new String[] {username});
     }
 }

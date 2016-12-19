@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.arunan.dreamcompilers.data.UserDbSchema.UserDetailTable;
+import com.example.arunan.dreamcompilers.data.UserDbSchema.UserRoleTable;
 import com.example.arunan.dreamcompilers.data.UserDbSchema.UserTable;
 
 import java.util.ArrayList;
@@ -28,20 +30,38 @@ public class UserBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + UserTable.NAME + "(" +
-                UserTable.Cols.UUID + " primary key, " +
-                UserTable.Cols.FULLNAME + ", " +
-                UserTable.Cols.EMAIL + ", " +
-                UserTable.Cols.PASSWORD  + ", " +
+                UserTable.Cols.USERNAME + ", " +
+                UserTable.Cols.PASSWORD + ", " +
                 UserTable.Cols.ROLE_ID + ", " +
                 UserTable.Cols.LOGIN + ")"
+        );
+
+        db.execSQL("create table " + UserDetailTable.NAME + "(" +
+                UserDetailTable.Cols.USERNAME + ", " +
+                UserDetailTable.Cols.EMAIL + ", " +
+                UserDetailTable.Cols.FIRSTNAME + ", " +
+                UserDetailTable.Cols.MIDDLENAME + ", " +
+                UserDetailTable.Cols.LASTNAME + ", " +
+                UserDetailTable.Cols.PHONENUMBER +
+                ")"
 
         );
-        //db.execSQL("insert into " + UserTable.NAME + "(" + UserTable.Cols.FULLNAME + ", " + UserTable.Cols.EMAIL + ", " + UserTable.Cols.PASSWORD  + ") values (?, ?, ?);");
+
+        db.execSQL("create table " + UserRoleTable.NAME + "(" +
+                UserRoleTable.Cols.ROLEID + ", " +
+                UserRoleTable.Cols.ROLENAME + ", " +
+                UserRoleTable.Cols.ADMINLEVEL + ")"
+        );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists " + UserTable.NAME);
+
+        db.execSQL("drop table if exists " + UserDetailTable.NAME);
+
+        db.execSQL("drop table if exists " + UserRoleTable.NAME);
+
         onCreate(db);
     }
 

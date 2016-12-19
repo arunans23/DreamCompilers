@@ -6,8 +6,6 @@ import android.database.CursorWrapper;
 import com.example.arunan.dreamcompilers.data.UserDbSchema.UserTable;
 import com.example.arunan.dreamcompilers.models.UserInfo;
 
-import java.util.UUID;
-
 /**
  * Created by arunan on 12/13/16.
  */
@@ -21,20 +19,34 @@ public class UserCursorWrapper extends CursorWrapper {
     }
 
     public UserInfo getUserInfo(){
-        String uuidString = getString(getColumnIndex(UserTable.Cols.UUID));
-        String fullName = getString(getColumnIndex(UserTable.Cols.FULLNAME));
-        String email = getString(getColumnIndex(UserTable.Cols.EMAIL));
+        String userName = getString(getColumnIndex(UserTable.Cols.USERNAME));
         String password = getString(getColumnIndex(UserTable.Cols.PASSWORD));
         String roleID = getString(getColumnIndex(UserTable.Cols.ROLE_ID));
-        int login = getInt(getColumnIndex((UserTable.Cols.LOGIN)));
+        int login = getInt(getColumnIndex(UserTable.Cols.LOGIN));
 
-        UserInfo userInfo = new UserInfo(UUID.fromString(uuidString));
-        userInfo.setFullName(fullName);
-        userInfo.setEmail(email);
+//        String firstName = getString(getColumnIndex(UserDetailTable.Cols.FIRSTNAME));
+//        String middleName = getString(getColumnIndex(UserDetailTable.Cols.MIDDLENAME));
+//        String lastName = getString(getColumnIndex(UserDetailTable.Cols.LASTNAME));
+//        String email = getString(getColumnIndex(UserDetailTable.Cols.EMAIL));
+//        String phoneNumber = getString(getColumnIndex(UserDetailTable.Cols.PHONENUMBER));
+//
+//        String roleName = getString(getColumnIndex(UserRoleTable.Cols.ROLENAME));
+//        int adminLevel = getInt(getColumnIndex(UserRoleTable.Cols.ADMINLEVEL));
+
+        UserInfo userInfo = new UserInfo(userName);
+
         userInfo.setPassword(password);
         userInfo.setRoleId(roleID);
         userInfo.setLogged(login!=0);
 
+//        userInfo.setFirstName(firstName);
+//        userInfo.setMiddleName(middleName);
+//        userInfo.setLastName(lastName);
+//        userInfo.setEmail(email);
+//        userInfo.setPhoneNumber(phoneNumber);
+//
+//        userInfo.setRoleName(roleName);
+//        userInfo.setAdminLevel(adminLevel);
 
         return userInfo;
     }
