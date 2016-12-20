@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.UUID;
+
 /**
  * Created by arunan on 12/13/16.
  */
@@ -57,9 +59,6 @@ public class LoginActivity extends Activity{
             startActivity(intent);
             finish();
         }
-
-        String responceCheck = "{\"error\":false,\"errorMsg\":\"login success\",\"tokn\":\"168908dd3227b8358eababa07fcaf091\",\"user\":{\"username\":\"shan\",\"password\":\"shan\",\"email\":\"shan\",\"firstName\":\"shan\",\"middleName\":\"shan\",\"phone\":\"shan\"},\"data\":[{\"diseaseDataId\":\"d01\",\"sysmptoms\":\"puka ridenawa\",\"description\":\"thiyanawa\",\"victimCount\":\"213\",\"locationCode\":\"81000\",\"entryId\":\"e01\"}]}";
-        processResponse(responceCheck);
 
         mLoginButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -140,6 +139,7 @@ public class LoginActivity extends Activity{
 
 
     private void processResponse(String response){
+        Toast.makeText(this, response, Toast.LENGTH_LONG);
         if(response == ""){
             Toast.makeText(this,"Server Timeout", Toast.LENGTH_LONG).show();
         }else{
@@ -170,13 +170,14 @@ public class LoginActivity extends Activity{
                     JSONArray diseaseArray = jsonRes.getJSONArray("data");
                     for (int m=0; m < diseaseArray.length(); m++){
                         JSONObject diseaseObject =diseaseArray.getJSONObject(m);
-                        String diseaseTitle = diseaseObject.getString("diseaseDataId");
+                        String diseaseEntryID = diseaseObject.getString("diseaseDataId");
                         String diseaseSymptoms = diseaseObject.getString("sysmptoms");
                         String diseaseDescription = diseaseObject.getString("description");
                         int diseaseVictimCount = diseaseObject.getInt("victimCount");
                         String locationCode = diseaseObject.getString("locationCode");
 
-                        Disease disease = new Disease(username);
+                        Disease disease = new Disease(UUID.fromString(diseaseEntryID));
+                        disease.setUserName(username);
                         disease.setSymptoms(diseaseSymptoms);
                         disease.setDescription(diseaseDescription);
                         disease.setLocation(locationCode);

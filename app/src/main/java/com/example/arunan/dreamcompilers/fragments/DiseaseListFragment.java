@@ -2,10 +2,12 @@ package com.example.arunan.dreamcompilers.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,17 +16,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.arunan.dreamcompilers.R;
 import com.example.arunan.dreamcompilers.activities.DiseaseListActivity;
 import com.example.arunan.dreamcompilers.activities.DiseasePagerActivity;
 import com.example.arunan.dreamcompilers.activities.LoginActivity;
+import com.example.arunan.dreamcompilers.app.AppConfig;
+import com.example.arunan.dreamcompilers.app.AppController;
 import com.example.arunan.dreamcompilers.models.Disease;
 import com.example.arunan.dreamcompilers.models.DiseaseLab;
 import com.example.arunan.dreamcompilers.models.UserInfo;
 import com.example.arunan.dreamcompilers.models.UserLab;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by arunan on 12/10/16.
@@ -37,6 +47,9 @@ public class DiseaseListFragment extends Fragment {
     private DiseaseAdapter mAdapter;
     private String username;
     private UserLab mUserLab;
+    private DiseaseLab diseaseLab;
+
+    private static final String TAG = "DiseaseListFragment";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +80,9 @@ public class DiseaseListFragment extends Fragment {
 
     //updateUI method for configuring user interfaces
     private void updateUI(){
-        DiseaseLab diseaseLab = DiseaseLab.get(getActivity());
+
+         diseaseLab = DiseaseLab.get(getActivity());
+        syncDown();
         List<Disease> diseases = diseaseLab.getUserDiseases(username);
 
         if (mAdapter == null){
@@ -176,6 +191,92 @@ public class DiseaseListFragment extends Fragment {
 
         public void setDiseases(List<Disease> diseases){
             mDiseases = diseases;
+        }
+    }
+
+    public void syncDown(){
+        UserInfo currentUser = mUserLab.getUser(username);
+        String token = currentUser.getToken();
+        JSONObject jsonrequest = new JSONObject();
+        try{
+            jsonrequest.put("username", username);
+            jsonrequest.put("token", token);
+        }catch (JSONException e){
+            e.printStackTrace();
+            Log.d(TAG, "JSON Object create error");
+        }
+
+        String jsonReqString = jsonrequest.toString();
+
+        final AppController request = new AppController(1, getActivity());
+
+        request.set_server_url(AppConfig.sURLsyncDown);
+
+        request.setParams("data", jsonReqString);
+        request.setRequestTag(TAG);
+        request.setProgessDialog("Syncing down...");
+
+        try {
+            String req = request.sendRequest();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        CountDownTimer timer = new CountDownTimer(3000, 1000) {
+            @Override
+            public void onFinish() {processSyncDownResponse(request.getResponse()); }
+
+            @Override
+            public void onTick(long millisLeft) {
+            }
+        };
+        timer.start();
+
+    }
+
+    private void processSyncDownResponse(String response){
+        if(response == ""){
+            Toast.makeText(getActivity(), "Server Timeout", Toast.LENGTH_LONG).show();
+        }else{
+            try {
+                JSONObject jsonRes = new JSONObject(response);
+                boolean error = jsonRes.getBoolean("error");
+                String errMessage = jsonRes.getString("errMessage");
+
+                if (!error){
+                    JSONArray diseaseArray = jsonRes.getJSONArray("data");
+                    for (int m=0; m < diseaseArray.length(); m++){
+                        JSONObject diseaseObject =diseaseArray.getJSONObject(m);
+                        String diseaseEntryID = diseaseObject.getString("diseaseDataId");
+                        String diseaseSymptoms = diseaseObject.getString("sysmptoms");
+                        String diseaseDescription = diseaseObject.getString("description");
+                        int diseaseVictimCount = diseaseObject.getInt("victimCount");
+                        String locationCode = diseaseObject.getString("locationCode");
+
+                        Disease disease = new Disease(username);
+                        disease.setSymptoms(diseaseSymptoms);
+                        disease.setDescription(diseaseDescription);
+                        disease.setLocation(locationCode);
+                        disease.setNoVictims(diseaseVictimCount);
+
+                        Disease checkDisease = diseaseLab.getDisease(UUID.fromString(diseaseEntryID));
+                        if (disease == null){
+                            diseaseLab.addDisease(disease);
+                        }else{
+                            diseaseLab.updateDisease(disease);
+                        }
+
+                    }
+                }else{
+                    Log.d(TAG, errMessage);
+                    Toast.makeText(getActivity(), errMessage, Toast.LENGTH_LONG).show();
+                }
+
+
+            } catch (JSONException e) {
+                Toast.makeText(getActivity(), response,Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
         }
     }
 }

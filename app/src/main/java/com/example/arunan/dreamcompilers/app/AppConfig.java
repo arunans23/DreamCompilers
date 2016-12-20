@@ -23,6 +23,8 @@ public class AppConfig {
     //public static String sURLregister = "http://192.168.8.105:8000/api/regitser";
 
 
+    public static String sURLsyncDown = "http://10.0.2.2:8000/api/sync/down";
+
 
 
     public static final String ROLE_DOCTOR = "ROLE_DOCTOR";

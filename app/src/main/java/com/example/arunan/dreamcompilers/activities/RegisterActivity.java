@@ -145,7 +145,7 @@ public class RegisterActivity extends Activity {
             e.printStackTrace();
         }
 
-        CountDownTimer timer = new CountDownTimer(2000, 1000) {
+        CountDownTimer timer = new CountDownTimer(4000, 1000) {
             @Override
             public void onFinish() {processResponse(request.getResponse()); }
 
