@@ -29,15 +29,15 @@ public class UserBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + UserTable.NAME + "(" +
+        db.execSQL("create table if not exists " + UserTable.NAME + "(" +
                 UserTable.Cols.USERNAME + ", " +
                 UserTable.Cols.PASSWORD + ", " +
                 UserTable.Cols.ROLE_ID + ", " +
-                UserTable.Cols.LOGIN +
+                UserTable.Cols.LOGIN + ", " +
                 UserTable.Cols.TOKEN + ")"
         );
 
-        db.execSQL("create table " + UserDetailTable.NAME + "(" +
+        db.execSQL("create table if not exists " + UserDetailTable.NAME + "(" +
                 UserDetailTable.Cols.USERNAME + ", " +
                 UserDetailTable.Cols.EMAIL + ", " +
                 UserDetailTable.Cols.FIRSTNAME + ", " +
@@ -48,7 +48,7 @@ public class UserBaseHelper extends SQLiteOpenHelper {
 
         );
 
-        db.execSQL("create table " + UserRoleTable.NAME + "(" +
+        db.execSQL("create table if not exists " + UserRoleTable.NAME + "(" +
                 UserRoleTable.Cols.ROLEID + ", " +
                 UserRoleTable.Cols.ROLENAME + ", " +
                 UserRoleTable.Cols.ADMINLEVEL + ")"

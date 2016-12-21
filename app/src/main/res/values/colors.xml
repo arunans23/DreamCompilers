@@ -17,6 +17,6 @@
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
-    <color name="edit_text_bg">#63bb3c</color>
+    <color name="edit_text_bg">#FFFFCC</color>
     <color name="disease_fragment_bg">#166c4d</color>
 </resources>

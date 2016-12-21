@@ -7,7 +7,7 @@ import java.util.UUID;
  */
 
 public class Disease {
-    private UUID mEntryId;
+    private String mEntryId;
     private String mTitle;
     private String mSymptoms;
     private String mDescription;
@@ -17,19 +17,18 @@ public class Disease {
     private String mLocation;
 
     //constructor to call when entering new crime
-    public Disease(String userName){
-        this(UUID.randomUUID());
-        mUserName = userName;
+    public Disease(){
+        this.mEntryId = UUID.randomUUID().toString();
         isSynced= false;
 
     }
 
     //constructor to call when querying the database
-    public Disease(UUID id){
-        mEntryId = id;
+    public Disease(String entryId){
+        mEntryId = entryId;
     }
 
-    public UUID getEntryId() {
+    public String getEntryId() {
         return mEntryId;
     }
 

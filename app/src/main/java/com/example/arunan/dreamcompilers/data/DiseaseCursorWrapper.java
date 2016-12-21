@@ -5,8 +5,6 @@ import android.database.CursorWrapper;
 
 import com.example.arunan.dreamcompilers.models.Disease;
 
-import java.util.UUID;
-
 /**
  * Created by arunan on 12/11/16.
  */
@@ -18,7 +16,7 @@ public class DiseaseCursorWrapper extends CursorWrapper{
     }
 
     public Disease getDisease(){
-        String uuidString = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.UUID));
+        String diseaseEntryId = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.UUID));
         String title = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.TITLE));
         String symptoms = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.SYMPTOMS));
         String description = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.DESCRIPTION));
@@ -27,7 +25,7 @@ public class DiseaseCursorWrapper extends CursorWrapper{
         String username = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.USER_NAME));
         String location = getString(getColumnIndex(DiseaseDbSchema.DiseaseTable.Cols.LOCATION));
 
-        Disease disease = new Disease(UUID.fromString(uuidString));
+        Disease disease = new Disease(diseaseEntryId);
         disease.setTitle(title);
         disease.setSymptoms(symptoms);
         disease.setDescription(description);

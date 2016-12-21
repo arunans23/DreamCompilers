@@ -6,7 +6,7 @@
     <string name="disease_description_hint">Enter the description here</string>
     <string name="disease_symptoms_title">Symptoms</string>
     <string name="disease_description_title">Description</string>
-    <string name="disease_victim_count_title">#Victims</string>
+    <string name="disease_location_title">Location</string>
 
     <string name="new_disease">New Disease</string>
 
@@ -32,6 +32,7 @@
     <string name="btn_disease_save">Save</string>
 
     <string-array name="register_district_entries">
+        <!--
         <item>Ampara</item>
         <item>Batticoloa</item>
         <item>Colombo</item>
@@ -42,6 +43,13 @@
         <item>Mannar</item>
         <item>Matale</item>
         <item>Matara</item>
+        -->
+
+        <item>00100</item>
+        <item>00600</item>
+        <item>10400</item>
+        <item>81000</item>
+        <item>89000</item>
 
     </string-array>
 

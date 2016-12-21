@@ -34,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by arunan on 12/10/16.
@@ -81,7 +80,9 @@ public class DiseaseListFragment extends Fragment {
     //updateUI method for configuring user interfaces
     private void updateUI(){
 
-         diseaseLab = DiseaseLab.get(getActivity());
+        diseaseLab = DiseaseLab.get(getActivity());
+
+        syncUp();
         syncDown();
         List<Disease> diseases = diseaseLab.getUserDiseases(username);
 
@@ -106,7 +107,8 @@ public class DiseaseListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_disease:
-                Disease disease = new Disease(username);
+                Disease disease = new Disease();
+                disease.setUserName(username);
                 DiseaseLab.get(getActivity()).addDisease(disease);
                 Intent intent = DiseasePagerActivity
                         .newIntent(getActivity(), disease.getEntryId());
@@ -194,7 +196,7 @@ public class DiseaseListFragment extends Fragment {
         }
     }
 
-    public void syncDown(){
+    private void syncDown(){
         UserInfo currentUser = mUserLab.getUser(username);
         String token = currentUser.getToken();
         JSONObject jsonrequest = new JSONObject();
@@ -208,23 +210,23 @@ public class DiseaseListFragment extends Fragment {
 
         String jsonReqString = jsonrequest.toString();
 
-        final AppController request = new AppController(1, getActivity());
+        final AppController requestDown = new AppController(1, getActivity());
 
-        request.set_server_url(AppConfig.sURLsyncDown);
+        requestDown.set_server_url(AppConfig.sURLsyncDown);
 
-        request.setParams("data", jsonReqString);
-        request.setRequestTag(TAG);
-        request.setProgessDialog("Syncing down...");
+        requestDown.setParams("data", jsonReqString);
+        requestDown.setRequestTag("syncDownRequest");
+        requestDown.setProgessDialog("Syncing down...");
 
         try {
-            String req = request.sendRequest();
+            String req = requestDown.sendRequest();
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        CountDownTimer timer = new CountDownTimer(3000, 1000) {
+        CountDownTimer timer = new CountDownTimer(2000, 1000) {
             @Override
-            public void onFinish() {processSyncDownResponse(request.getResponse()); }
+            public void onFinish() {processSyncDownResponse(requestDown.getResponse()); }
 
             @Override
             public void onTick(long millisLeft) {
@@ -236,7 +238,7 @@ public class DiseaseListFragment extends Fragment {
 
     private void processSyncDownResponse(String response){
         if(response == ""){
-            Toast.makeText(getActivity(), "Server Timeout", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), "Server Timeout", Toast.LENGTH_LONG).show();
         }else{
             try {
                 JSONObject jsonRes = new JSONObject(response);
@@ -247,20 +249,22 @@ public class DiseaseListFragment extends Fragment {
                     JSONArray diseaseArray = jsonRes.getJSONArray("data");
                     for (int m=0; m < diseaseArray.length(); m++){
                         JSONObject diseaseObject =diseaseArray.getJSONObject(m);
+                        String diseaseTitle = diseaseObject.getString("title");
                         String diseaseEntryID = diseaseObject.getString("diseaseDataId");
-                        String diseaseSymptoms = diseaseObject.getString("sysmptoms");
+                        String diseaseSymptoms = diseaseObject.getString("symptoms");
                         String diseaseDescription = diseaseObject.getString("description");
                         int diseaseVictimCount = diseaseObject.getInt("victimCount");
                         String locationCode = diseaseObject.getString("locationCode");
 
                         Disease disease = new Disease(username);
+                        disease.setTitle(diseaseTitle);
                         disease.setSymptoms(diseaseSymptoms);
                         disease.setDescription(diseaseDescription);
                         disease.setLocation(locationCode);
                         disease.setNoVictims(diseaseVictimCount);
 
-                        Disease checkDisease = diseaseLab.getDisease(UUID.fromString(diseaseEntryID));
-                        if (disease == null){
+                        Disease checkDisease = diseaseLab.getDisease(diseaseEntryID);
+                        if (checkDisease == null){
                             diseaseLab.addDisease(disease);
                         }else{
                             diseaseLab.updateDisease(disease);
@@ -274,10 +278,101 @@ public class DiseaseListFragment extends Fragment {
 
 
             } catch (JSONException e) {
-                Toast.makeText(getActivity(), response,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), response,Toast.LENGTH_LONG).show();
+                Log.d("JSON Exception", response);
                 e.printStackTrace();
             }
         }
     }
+
+    private void syncUp(){
+        UserInfo currUser = mUserLab.getUser(username);
+        String token = currUser.getToken();
+        final List<Disease> diseaseCurrent;
+        diseaseCurrent = diseaseLab.getUnsyncedDiseases(username);
+        JSONObject jsonReq = new JSONObject();
+        try {
+            jsonReq.put("username", username);
+            jsonReq.put("token", token);
+
+            JSONArray jsonDiseaseArray = new JSONArray();
+
+            for (int m = 0; m < diseaseCurrent.size(); m++){
+                JSONObject jsonDisease = new JSONObject();
+                jsonDisease.put("entryId", diseaseCurrent.get(m).getEntryId());
+                String check = diseaseCurrent.get(m).getTitle();
+                jsonDisease.put("title", diseaseCurrent.get(m).getTitle());
+                jsonDisease.put("symptoms", diseaseCurrent.get(m).getSymptoms());
+                jsonDisease.put("description", diseaseCurrent.get(m).getDescription());
+                jsonDisease.put("victimCount", diseaseCurrent.get(m).getNoVictims());
+                jsonDisease.put("locationCode", diseaseCurrent.get(m).getLocation());
+                jsonDiseaseArray.put(m, jsonDisease);
+            }
+
+            jsonReq.put("data", jsonDiseaseArray);
+            Log.d("Syncup JSON", jsonReq.toString());
+
+        }catch (JSONException e){
+            e.printStackTrace();
+            Log.d(TAG, "JSON create error");
+        }
+
+        String jsonReqString = jsonReq.toString();
+
+        final AppController requestUp = new AppController(1, getActivity());
+
+        requestUp.set_server_url(AppConfig.sURLsyncUp);
+
+        requestUp.setParams("data", jsonReqString);
+        requestUp.setRequestTag("syncupRequest");
+        requestUp.setProgessDialog("Syncing up...");
+
+        try {
+            String req = requestUp.sendRequest();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        processSyncUpResponse(requestUp.getResponse(), diseaseCurrent);
+
+        CountDownTimer timer = new CountDownTimer(3000, 1000) {
+            @Override
+            public void onFinish() {
+                processSyncUpResponse(requestUp.getResponse(), diseaseCurrent); }
+
+
+            @Override
+            public void onTick(long millisLeft) {
+            }
+        };
+        timer.start();
+    }
+
+    private void processSyncUpResponse(String response, List<Disease> diseaseCurrent){
+        if(response == "" || response == "Network Unavailable"){
+            //Toast.makeText(this, "Server Timeout", Toast.LENGTH_LONG).show();
+        }else{
+            try {
+                JSONObject jsonRes = new JSONObject(response);
+                boolean error = jsonRes.getBoolean("error");
+                String errorMsg = jsonRes.getString("errorMsg");
+
+                if (!error){
+                    Log.d(TAG, errorMsg);
+                    for (int m = 0; m < diseaseCurrent.size(); m++){
+                        diseaseCurrent.get(m).setSynced(true);
+                        diseaseLab.updateDisease(diseaseCurrent.get(m));
+                    }
+                }else{
+                    Log.d(TAG, errorMsg);
+                }
+            } catch (JSONException e) {
+                Log.d(TAG, "Syncup JSON Error");
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
 }
 

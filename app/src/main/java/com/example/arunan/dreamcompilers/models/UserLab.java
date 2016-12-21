@@ -44,8 +44,8 @@ public class UserLab {
 
     public UserInfo getUser(String username){
         UserCursorWrapper cursor = queryUsers(
-                UserTable.Cols.USERNAME + " = ?",
-                new String[] {username}
+                UserTable.Cols.USERNAME + " = ?" ,
+                new String[]{username}
         );
 
         try{
@@ -129,4 +129,6 @@ public class UserLab {
         mDatabase.update(UserTable.NAME, values, UserTable.Cols.USERNAME + " = ?",
                 new String[] {username});
     }
+
+
 }

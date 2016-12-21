@@ -147,10 +147,14 @@ public class RegisterActivity extends Activity {
 
         CountDownTimer timer = new CountDownTimer(4000, 1000) {
             @Override
-            public void onFinish() {processResponse(request.getResponse()); }
+            public void onFinish() {
+                processResponse(request.getResponse());
+                request.hideDialog();
+            }
 
             @Override
             public void onTick(long millisLeft) {
+                request.showDialog();
             }
         };
         timer.start();

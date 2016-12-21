@@ -11,17 +11,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.arunan.dreamcompilers.R;
 import com.example.arunan.dreamcompilers.activities.DiseaseListActivity;
+import com.example.arunan.dreamcompilers.app.AppConfig;
 import com.example.arunan.dreamcompilers.models.Disease;
 import com.example.arunan.dreamcompilers.models.DiseaseLab;
-
-import java.util.UUID;
+import com.example.arunan.dreamcompilers.models.UserInfo;
+import com.example.arunan.dreamcompilers.models.UserLab;
 
 import static com.example.arunan.dreamcompilers.R.menu.disease;
 
@@ -33,17 +36,37 @@ import static com.example.arunan.dreamcompilers.R.menu.disease;
 
 public class DiseaseFragment extends Fragment {
     private Disease mDisease;
-    private TextView mTitleField;
+    private AutoCompleteTextView mTitleField;
     private EditText mSymptomsField;
     private EditText mDescriptionField;
     private NumberPicker mVictimCount;
     private Spinner mDistrictSpinner;
 
+    private UserInfo currentUser;
+    private UserLab mUserLab;
+
+    private String[] diseaseOptions = {"Avian influenza",
+            "Cholera",
+            "Coronaviruses (MERS-CoV, SARS)",
+            "Ebola virus disease",
+            "Hendra virus infection",
+            "Influenza (seasonal, pandemic)",
+            "Leptospirosis",
+            "Malaria",
+            "Meningitis",
+            "Nipah virus infection",
+            "Plague",
+            "Rift Valley fever",
+            "Smallpox and human monkeypox",
+            "Tularaemia",
+            "Ebola, Marburg, Lassa, Crimean-Congo haemorrhagic fever",
+            "Yellow fever",
+            "Zika virus"};
 
 
     private static final String ARG_DISEASE_ID = "disease_id";
 
-    public static DiseaseFragment newInstance(UUID diseaseID){
+    public static DiseaseFragment newInstance(String diseaseID){
         Bundle args = new Bundle();
         args.putSerializable(ARG_DISEASE_ID, diseaseID);
 
@@ -57,9 +80,11 @@ public class DiseaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         //new disease gets created when Fragment is created
-        UUID diseaseId = (UUID) getArguments().getSerializable(ARG_DISEASE_ID);
+        String diseaseId = (String) getArguments().getSerializable(ARG_DISEASE_ID);
 
         mDisease = DiseaseLab.get(getActivity()).getDisease(diseaseId);
+        mUserLab = UserLab.get(getActivity());
+        currentUser = mUserLab.getUser(mDisease.getUserName());
     }
 
     @Override
@@ -75,11 +100,13 @@ public class DiseaseFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_disease, container, false);
 
 
-
         //Title field
-        mTitleField = (TextView)v.findViewById(R.id.disease_title);
+        mTitleField = (AutoCompleteTextView)v.findViewById(R.id.disease_title);
+        ArrayAdapter adapter = new
+                ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1, diseaseOptions);
+        mTitleField.setAdapter(adapter);
+        mTitleField.setThreshold(3);
         mTitleField.setText(mDisease.getTitle());
-
 
 
         //Symptoms Field
@@ -127,17 +154,27 @@ public class DiseaseFragment extends Fragment {
         });
 
         //VictimCount field
+
         mVictimCount = (NumberPicker)v.findViewById(R.id.disease_victim_count);
-        mVictimCount.setMinValue(0);
-        mVictimCount.setMaxValue(10000);
-        mVictimCount.setValue(mDisease.getNoVictims());
-        mVictimCount.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                mDisease.setNoVictims(newVal);
-                mDisease.setSynced(false);
-            }
-        });
+
+        if (!currentUser.getRoleId().equals(AppConfig.ROLE_APP_USER)){
+            mVictimCount.setVisibility(View.VISIBLE);
+            mVictimCount.setMinValue(0);
+            mVictimCount.setMaxValue(10000);
+            mVictimCount.setValue(mDisease.getNoVictims());
+
+            mVictimCount.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    mDisease.setNoVictims(newVal);
+                    mDisease.setSynced(false);
+                }
+            });
+        }else{
+            mVictimCount.setValue(1);
+            mVictimCount.setVisibility(View.INVISIBLE);
+        }
+
 
         //mVictimCount.setVisibility(View.INVISIBLE);
 
@@ -158,11 +195,17 @@ public class DiseaseFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_disease_save:
-                updateDisease();
-                Intent intent = DiseaseListActivity
-                        .newIntent(getActivity(), mDisease.getUserName());
-                startActivity(intent);
-                return true;
+                if (!mTitleField.getText().toString().isEmpty()){
+                    updateDisease();
+                    Intent intent = DiseaseListActivity
+                            .newIntent(getActivity(), mDisease.getUserName());
+                    startActivity(intent);
+                    return true;
+                }else{
+                    Toast.makeText(getActivity(), "Enter details", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -172,5 +215,7 @@ public class DiseaseFragment extends Fragment {
     public void updateDisease(){
 
         mDisease.setLocation(mDistrictSpinner.getSelectedItem().toString());
+        mDisease.setTitle(mTitleField.getText().toString());
+        mDisease.setSynced(false);
     }
 }

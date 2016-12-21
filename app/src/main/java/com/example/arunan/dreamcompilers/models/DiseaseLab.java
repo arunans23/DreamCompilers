@@ -11,7 +11,6 @@ import com.example.arunan.dreamcompilers.data.DiseaseDbSchema.DiseaseTable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by arunan on 12/10/16.
@@ -81,16 +80,28 @@ public class DiseaseLab {
         return userDiseases;
     }
 
+    public List<Disease> getUnsyncedDiseases(String username){
+        List<Disease> userDiseases = getUserDiseases(username);
+        List<Disease> userUnSyncedDiseases = new ArrayList<>();
+        for (int i = 0; i < userDiseases.size(); i++){
+            if (!userDiseases.get(i).isSynced()){
+                userUnSyncedDiseases.add(userDiseases.get(i));
+            }
+        }
+
+        return userUnSyncedDiseases;
+    }
+
     public void addDisease(Disease disease){
         ContentValues values = getContentValues(disease);
 
         mDatabase.insert(DiseaseTable.NAME, null, values);
     }
 
-    public Disease getDisease(UUID id){
+    public Disease getDisease(String id){
         DiseaseCursorWrapper cursor = queryDiseases(
                 DiseaseTable.Cols.UUID + " = ?",
-                new String[] {id.toString()}
+                new String[] {id}
         );
 
         try{

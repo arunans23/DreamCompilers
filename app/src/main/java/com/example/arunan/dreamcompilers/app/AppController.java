@@ -113,15 +113,16 @@ public class AppController extends AppCompatActivity {
 
 
     public String getResponse(){
+        Log.d("REsponses", response_msg);
         return response_msg;
     }
 
-    private void showDialog() {
+    public void showDialog() {
         if (!mProgressDialog.isShowing())
             mProgressDialog.show();
     }
 
-    private void hideDialog() {
+    public void hideDialog() {
         if (mProgressDialog.isShowing())
             mProgressDialog.dismiss();
     }

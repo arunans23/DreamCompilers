@@ -6,7 +6,7 @@ package com.example.arunan.dreamcompilers.app;
 
 public class AppConfig {
     //user login url
-    public static String sURLlogin = "http://10.0.2.2:8000/api/login";
+
 
     //user register url
 //    public static String sURLregister = "http://192.168.43.26:8000/api/register";
@@ -19,15 +19,21 @@ public class AppConfig {
 //    public static String sURLregister = "http://192.168.43.26/databaseProject/test.php";
 
   //  public static String sURLregister = "http://httpbin.org/post";
-    public static String sURLregister = "http://10.0.2.2:8000/api/register";
+
     //public static String sURLregister = "http://192.168.8.105:8000/api/regitser";
-
-
+    public static String sURLlogin = "http://10.0.2.2:8000/api/login";
+    public static String sURLregister = "http://10.0.2.2:8000/api/register";
     public static String sURLsyncDown = "http://10.0.2.2:8000/api/sync/down";
+    public static String sURLsyncUp = "http://10.0.2.2:8000/api/sync/up";
 
 
 
     public static final String ROLE_DOCTOR = "ROLE_DOCTOR";
     public static final String ROLE_APP_USER = "ROLE_APP_USER";
     public static final String ROLE_HEALTH_OFFICER = "ROLE_HEALTH_OFFICER";
+
+//    public static String sURLlogin = "http://192.168.43.92:8000/api/login";
+//    public static String sURLregister = "http://192.168.43.92:8000/api/register";
+//    public static String sURLsyncDown = "http://192.168.43.92:8000/api/sync/down";
+//    public static String sURLsyncUp = "http://192.168.43.92:8000/api/sync/up";
 }

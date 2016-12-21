@@ -9,13 +9,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.arunan.dreamcompilers.models.Disease;
-import com.example.arunan.dreamcompilers.models.DiseaseLab;
 import com.example.arunan.dreamcompilers.R;
 import com.example.arunan.dreamcompilers.fragments.DiseaseFragment;
+import com.example.arunan.dreamcompilers.models.Disease;
+import com.example.arunan.dreamcompilers.models.DiseaseLab;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by arunan on 12/10/16.
@@ -30,7 +29,7 @@ public class DiseasePagerActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private List<Disease> mDiseases;
 
-    public static Intent newIntent(Context packageContext, UUID diseaseId){
+    public static Intent newIntent(Context packageContext, String diseaseId){
         Intent intent = new Intent(packageContext, DiseasePagerActivity.class);
         intent.putExtra(EXTRA_DISEASE_ID, diseaseId);
         return intent;
@@ -41,7 +40,7 @@ public class DiseasePagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_disease_pager);
 
-        UUID diseaseId = (UUID) getIntent()
+        String diseaseId = (String) getIntent()
                 .getSerializableExtra(EXTRA_DISEASE_ID);
 
         mViewPager = (ViewPager) findViewById(R.id.activity_disease_view_pager);

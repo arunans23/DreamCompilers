@@ -23,8 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.UUID;
-
 /**
  * Created by arunan on 12/13/16.
  */
@@ -89,6 +87,8 @@ public class LoginActivity extends Activity{
         });
 
         Button button = (Button)findViewById(R.id.databaseCheck);
+        button.setEnabled(false);
+        button.setVisibility(View.INVISIBLE);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -114,7 +114,7 @@ public class LoginActivity extends Activity{
         Log.d(TAG, jsonString);
 
         final AppController request = new AppController(1,this);
-        request.set_server_url(AppConfig.sURLregister);
+        request.set_server_url(AppConfig.sURLlogin);
 
         request.setParams("data", jsonString);
         request.setRequestTag(TAG);
@@ -126,12 +126,16 @@ public class LoginActivity extends Activity{
             e.printStackTrace();
         }
 
-        CountDownTimer timer = new CountDownTimer(2000, 1000) {
+        CountDownTimer timer = new CountDownTimer(3000, 1000) {
             @Override
-            public void onFinish() {processResponse(request.getResponse()); }
+            public void onFinish() {
+                processResponse(request.getResponse());
+                request.hideDialog();
+            }
 
             @Override
             public void onTick(long millisLeft) {
+                request.showDialog();
             }
         };
         timer.start();
@@ -147,7 +151,7 @@ public class LoginActivity extends Activity{
                 JSONObject jsonRes = new JSONObject(response);
                 boolean error = jsonRes.getBoolean("error");
                 String errorMsg = jsonRes.getString("errorMsg");
-                String token = jsonRes.getString("tokn");
+                String token = jsonRes.getString("token");
 
                 if (!error){
                     JSONObject jsonUser = jsonRes.getJSONObject("user");
@@ -157,33 +161,45 @@ public class LoginActivity extends Activity{
                     String firstName = jsonUser.getString("firstName");
                     String middleName = jsonUser.getString("middleName");
                     String phone = jsonUser.getString("phone");
-                    //String role = jsonUser.getString("role");
+                    String role = jsonUser.getString("roleId");
 
                     UserInfo userInfo = new UserInfo(username);
                     userInfo.setPassword(password);
                     //userInfo.setRoleId(role);
                     userInfo.setToken(token);
                     userInfo.setLogged(true);
+                    userInfo.setRoleId(role);
 
-                    mUserLab.addUser(userInfo);
+                    if (mUserLab.getUser(username)==null){
+                        mUserLab.addUser(userInfo);
+                    }else{
+                        mUserLab.updateUser(userInfo);
+                    }
+
 
                     JSONArray diseaseArray = jsonRes.getJSONArray("data");
                     for (int m=0; m < diseaseArray.length(); m++){
-                        JSONObject diseaseObject =diseaseArray.getJSONObject(m);
-                        String diseaseEntryID = diseaseObject.getString("diseaseDataId");
-                        String diseaseSymptoms = diseaseObject.getString("sysmptoms");
+                        JSONObject diseaseObject = diseaseArray.getJSONObject(m);
+                        String diseaseEntryID = diseaseObject.getString("entryId");
+                        String title = diseaseObject.getString("title");
+                        String diseaseSymptoms = diseaseObject.getString("symptoms");
                         String diseaseDescription = diseaseObject.getString("description");
                         int diseaseVictimCount = diseaseObject.getInt("victimCount");
                         String locationCode = diseaseObject.getString("locationCode");
 
-                        Disease disease = new Disease(UUID.fromString(diseaseEntryID));
+                        Disease disease = new Disease(diseaseEntryID);
+                        disease.setTitle(title);
                         disease.setUserName(username);
                         disease.setSymptoms(diseaseSymptoms);
                         disease.setDescription(diseaseDescription);
                         disease.setLocation(locationCode);
                         disease.setNoVictims(diseaseVictimCount);
+                        if(mDiseaseLab.getDisease(diseaseEntryID)==null){
+                            mDiseaseLab.addDisease(disease);
+                        }else{
+                            mDiseaseLab.updateDisease(disease);
+                        }
 
-                        mDiseaseLab.addDisease(disease);
                     }
 
                     Intent i = DiseaseListActivity.newIntent(this, username);
@@ -191,7 +207,7 @@ public class LoginActivity extends Activity{
                     finish();
 
                 }else{
-                    Toast.makeText(this, token, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 Toast.makeText(this, "JSON PARSE ERROR", Toast.LENGTH_LONG).show();
